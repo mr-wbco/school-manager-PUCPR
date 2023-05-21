@@ -1,6 +1,7 @@
 import com.enums.ActionsMenuOptionsEnum;
 import com.enums.MainMenuOptionsEnum;
 import com.system.SystemServiceBean;
+import com.utils.UTILS;
 
 public class Main {
 
@@ -12,7 +13,7 @@ public class Main {
             MainMenuOptionsEnum mainMenuOptionsEnum = systemServiceBean.showMainMenu();
 
             if (mainMenuOptionsEnum == null) {
-                System.out.println("Número inválido. Tente novamente.");
+                System.out.println(UTILS.translate(UTILS.INCORRET_NUMBER_ERROR_MESSAGE));
                 continue;
             }
 
