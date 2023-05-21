@@ -26,7 +26,7 @@ public class Main {
                 ActionsMenuOptionsEnum actionsMenuOptionsEnum = systemServiceBean.showSecundaryMenu(mainMenuOptionsEnum);
 
                 if (actionsMenuOptionsEnum == null) {
-                    System.out.println("Número inválido. Tente novamente.");
+                    System.out.println(UTILS.translate(UTILS.INCORRET_NUMBER_ERROR_MESSAGE));
                     continue;
                 }
 
