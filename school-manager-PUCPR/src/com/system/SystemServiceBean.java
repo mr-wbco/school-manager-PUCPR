@@ -2,19 +2,20 @@ package com.system;
 
 import com.enums.ActionsMenuOptionsEnum;
 import com.enums.MainMenuOptionsEnum;
-import com.system.service.SystemService;
+import com.objects.DataVO;
+import com.student.StudentServiceBean;
 import com.utils.UTILS;
 
 import java.util.Scanner;
 
 public class SystemServiceBean implements SystemService {
 
+    public static StudentServiceBean studentServiceBean = new StudentServiceBean();
+
     @Override
     public MainMenuOptionsEnum showMainMenu() {
-        System.out.println("*********************************");
-        System.out.println("GERENCIADOR DE SISTEMA ACADÊMICO");
-        System.out.println("*********************************");
-        System.out.println(" ");
+        UTILS.printHeaderManager();
+
         System.out.println("Você está em: [MENU PRINCIPAL]");
         System.out.println("(1) Gerenciar Estudantes");
         System.out.println("(2) Gerenciar Professores");
@@ -42,18 +43,16 @@ public class SystemServiceBean implements SystemService {
                 return mainMenuOptionsEnum;
 
             } catch (Exception e) {
-                System.out.println("Você digitou uma letra em vez de um número inteiro. Digite um número válido.");
+                System.out.println(UTILS.translate(UTILS.INCORRET_NUMBER_ERROR_MESSAGE));
+                UTILS.pressEnterToContinue();
             }
         }
     }
 
     @Override
     public ActionsMenuOptionsEnum showSecundaryMenu(MainMenuOptionsEnum mainMenuOptionsEnum) {
+        UTILS.printHeaderManager();
 
-        System.out.println("*********************************");
-        System.out.println("GERENCIADOR DE SISTEMA ACADÊMICO");
-        System.out.println("*********************************");
-        System.out.println(" ");
         System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s]") + "%n", UTILS.translate(mainMenuOptionsEnum.toString()));
         System.out.println("(1) Incluir");
         System.out.println("(2) Listar");
@@ -81,33 +80,75 @@ public class SystemServiceBean implements SystemService {
                 return actionsMenuOptionsEnum;
 
             } catch (Exception e) {
-                System.out.println("Você digitou uma letra em vez de um número inteiro. Digite um número válido.");
+                System.out.println(UTILS.translate(UTILS.INCORRET_NUMBER_ERROR_MESSAGE));
+                UTILS.pressEnterToContinue();
             }
         }
     }
 
     @Override
-    public void insertNew(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum) {
-        System.out.println("ENTROU NO INSERT MENU");
+    public void insertMenu(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum, DataVO dataVO) {
+        UTILS.printHeaderManager();
+
+        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s] > [INCLUIR NOVO]") + "%n", UTILS.translate(mainMenuOptionsEnum.toString()));
+
+        switch (mainMenuOptionsEnum) {
+            case STUDENT -> studentServiceBean.insertNewStudent(mainMenuOptionsEnum, actionsMenuOptionsEnum, dataVO);
+            case PROFESSOR -> System.out.println("INSERINDO NOVO PROFESSOR");
+            case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
+            case CLASS -> System.out.println("INSERINDO NOVA TURMA");
+            case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
+            case EXIT -> System.out.println("RETORNANDO AO MENU ANTERIOR");
+        }
+
+        UTILS.pressEnterToContinue();
     }
 
     @Override
-    public void viewList(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum) {
-        System.out.println("ENTROU NO VIEW MENU");
+    public void viewMenu(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum, DataVO dataVO) {
+        UTILS.printHeaderManager();
+
+        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s] > [LISTAR TODOS]") + "%n", UTILS.translate(mainMenuOptionsEnum.toString()));
+
+        switch (mainMenuOptionsEnum) {
+            case STUDENT -> studentServiceBean.viewStudentList(mainMenuOptionsEnum, actionsMenuOptionsEnum, dataVO);
+            case PROFESSOR -> System.out.println("INSERINDO NOVO PROFESSOR");
+            case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
+            case CLASS -> System.out.println("INSERINDO NOVA TURMA");
+            case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
+            case EXIT -> System.out.println("RETORNANDO AO MENU ANTERIOR");
+        }
+
+        UTILS.pressEnterToContinue();
     }
 
     @Override
-    public void updateList(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum) {
-        System.out.println("ENTROU NO UPDATE MENU");
+    public void updateMenu(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum, DataVO dataVO) {
+        UTILS.printHeaderManager();
+
+        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s] > [ATUALIZAR INFORMACÕES]") + "%n", UTILS.translate(mainMenuOptionsEnum.toString()));
+
+        switch (mainMenuOptionsEnum) {
+            case STUDENT -> studentServiceBean.updateStudent(mainMenuOptionsEnum, actionsMenuOptionsEnum, dataVO);
+            case PROFESSOR -> System.out.println("INSERINDO NOVO PROFESSOR");
+            case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
+            case CLASS -> System.out.println("INSERINDO NOVA TURMA");
+            case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
+            case EXIT -> System.out.println("RETORNANDO AO MENU ANTERIOR");
+        }
+
+        UTILS.pressEnterToContinue();
     }
 
     @Override
-    public void deleteItem(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum) {
+    public void deleteMenu(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum, DataVO dataVO) {
         System.out.println("ENTROU NO DELETE MENU");
+        UTILS.pressEnterToContinue();
     }
 
     @Override
-    public void clearList(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum) {
+    public void clearListMenu(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum, DataVO dataVO) {
         System.out.println("ENTROU NO CLEAR LIST MENU");
+        UTILS.pressEnterToContinue();
     }
 }
