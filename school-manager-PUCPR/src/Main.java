@@ -17,7 +17,7 @@ public class Main {
             }
 
             if (MainMenuOptionsEnum.EXIT.equals(mainMenuOptionsEnum)) {
-                System.out.println("Saindo do sistema. Teste de commit.");
+                System.out.println("Saindo do sistema.");
                 break;
             }
 
