@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/school-manager-PUCPR.iml" filepath="$PROJECT_DIR$/school-manager-PUCPR.iml" />
+      <module fileurl="file://$PROJECT_DIR$/school-manager-core/school-manager-core.iml" filepath="$PROJECT_DIR$/school-manager-core/school-manager-core.iml" />
     </modules>
   </component>
 </project>
