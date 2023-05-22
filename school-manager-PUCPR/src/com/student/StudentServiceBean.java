@@ -20,13 +20,9 @@ public class StudentServiceBean implements StudentService {
         long studentFederalIdentification = this.generateStudentFederalIdentification();
 
         if (!this.studentAlreadyExists(studentCode, studentFederalIdentification, studentName, dataVO.getStudentList())) {
-            Student student = new Student();
-            student.setCode(studentCode);
-            student.setName(studentName);
-            student.setAge(studentAge);
-            student.setFederalIdentification(studentFederalIdentification);
-
+            Student student = new Student(studentCode, studentName, studentAge, studentFederalIdentification);
             dataVO.getStudentList().add(dataVO.getStudentList().size(), student);
+
             System.out.printf(("\nO estudante %s foi adicionado com sucesso.") + "%n", student.getName().toUpperCase());
         } else {
             System.out.println("\nNão foi possível adicionar. Estudante já cadastrado no sistema.");

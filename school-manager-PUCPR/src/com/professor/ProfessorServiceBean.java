@@ -21,13 +21,9 @@ public class ProfessorServiceBean implements ProfessorService {
         long professorFederalIdentification = this.generateProfessorFederalIdentification();
 
         if (!this.professorAlreadyExists(professorCode, professorFederalIdentification, professorName, dataVO.getProfessorList())) {
-            Professor professor = new Professor();
-            professor.setCode(professorCode);
-            professor.setName(professorName);
-            professor.setAge(professorAge);
-            professor.setFederalIdentification(professorFederalIdentification);
-
+            Professor professor = new Professor(professorCode, professorName, professorAge, professorFederalIdentification);
             dataVO.getProfessorList().add(dataVO.getProfessorList().size(), professor);
+
             System.out.printf(("\nO professor %s foi adicionado com sucesso.") + "%n", professor.getName().toUpperCase());
         } else {
             System.out.println("\nNão foi possível adicionar. Professor já cadastrado no sistema.");
