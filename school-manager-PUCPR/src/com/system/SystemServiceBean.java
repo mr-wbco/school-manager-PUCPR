@@ -3,6 +3,7 @@ package com.system;
 import com.enums.ActionsMenuOptionsEnum;
 import com.enums.MainMenuOptionsEnum;
 import com.objects.DataVO;
+import com.professor.ProfessorServiceBean;
 import com.student.StudentServiceBean;
 import com.utils.UTILS;
 
@@ -11,6 +12,7 @@ import java.util.Scanner;
 public class SystemServiceBean implements SystemService {
 
     public static StudentServiceBean studentServiceBean = new StudentServiceBean();
+    public static ProfessorServiceBean professorServiceBean = new ProfessorServiceBean();
 
     @Override
     public MainMenuOptionsEnum showMainMenu() {
@@ -94,7 +96,7 @@ public class SystemServiceBean implements SystemService {
 
         switch (mainMenuOptionsEnum) {
             case STUDENT -> studentServiceBean.insertNewStudent(dataVO);
-            case PROFESSOR -> System.out.println("INSERINDO NOVO PROFESSOR");
+            case PROFESSOR -> professorServiceBean.insertNewProfessor(dataVO);
             case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
             case CLASS -> System.out.println("INSERINDO NOVA TURMA");
             case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
@@ -112,7 +114,7 @@ public class SystemServiceBean implements SystemService {
 
         switch (mainMenuOptionsEnum) {
             case STUDENT -> studentServiceBean.viewStudentList(dataVO);
-            case PROFESSOR -> System.out.println("INSERINDO NOVO PROFESSOR");
+            case PROFESSOR -> professorServiceBean.viewProfessorList(dataVO);
             case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
             case CLASS -> System.out.println("INSERINDO NOVA TURMA");
             case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
@@ -130,7 +132,7 @@ public class SystemServiceBean implements SystemService {
 
         switch (mainMenuOptionsEnum) {
             case STUDENT -> studentServiceBean.updateStudent(dataVO);
-            case PROFESSOR -> System.out.println("INSERINDO NOVO PROFESSOR");
+            case PROFESSOR -> professorServiceBean.updateProfessor(dataVO);
             case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
             case CLASS -> System.out.println("INSERINDO NOVA TURMA");
             case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
@@ -148,7 +150,7 @@ public class SystemServiceBean implements SystemService {
 
         switch (mainMenuOptionsEnum) {
             case STUDENT -> studentServiceBean.deleteOneStudent(dataVO);
-            case PROFESSOR -> System.out.println("INSERINDO NOVO PROFESSOR");
+            case PROFESSOR -> professorServiceBean.deleteOneProfessor(dataVO);
             case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
             case CLASS -> System.out.println("INSERINDO NOVA TURMA");
             case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
@@ -166,7 +168,7 @@ public class SystemServiceBean implements SystemService {
 
         switch (mainMenuOptionsEnum) {
             case STUDENT -> studentServiceBean.clearStudentList(dataVO);
-            case PROFESSOR -> System.out.println("INSERINDO NOVO PROFESSOR");
+            case PROFESSOR -> professorServiceBean.clearProfessorList(dataVO);
             case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
             case CLASS -> System.out.println("INSERINDO NOVA TURMA");
             case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
