@@ -2,16 +2,22 @@ package com.student;
 
 import com.objects.Student;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.io.*;
 
 public class StudentBO {
 
     public static void writeStudent(String fileName, Student student) {
         try {
+            JsonObject jsonObject = Json.createObjectBuilder()
+                    .add("nome", student.getName())
+                    .add("idade", student.getAge())
+                    .build();
+
             BufferedWriter writer = new BufferedWriter(new FileWriter("pessoa.txt"));
-            String string = student.toString(student);
-            System.out.println(string);
-            writer.write(student.toString(student));
+            System.out.println(jsonObject.toString());
+            writer.write(jsonObject.toString());
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
