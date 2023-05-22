@@ -34,4 +34,36 @@ public class UTILS {
         System.out.println("*********************************");
         System.out.println(" ");
     }
+
+    public static int scannerIntValue() {
+        int number = 0;
+        boolean isValidNumber = false;
+        while (!isValidNumber) {
+            try {
+                number = new Scanner(System.in).nextInt();
+                isValidNumber = true;
+            } catch (Exception e) {
+                System.out.println("\nDIGITE UM NÚMERO VÁLIDO!");
+                new Scanner(System.in).next();
+            }
+        }
+
+        return number;
+    }
+
+    public static long scannerLongValue() {
+        long number = 0;
+        boolean isValidNumber = false;
+        while (!isValidNumber) {
+            try {
+                number = new Scanner(System.in).nextLong();
+                isValidNumber = true;
+            } catch (Exception e) {
+                System.out.println("\nDIGITE UM NÚMERO VÁLIDO!");
+                new Scanner(System.in).next();
+            }
+        }
+
+        return number;
+    }
 }

@@ -4,8 +4,6 @@ import com.objects.DataVO;
 import com.system.SystemServiceBean;
 import com.utils.UTILS;
 
-import java.util.HashMap;
-
 public class Main {
 
     public static SystemServiceBean systemServiceBean = new SystemServiceBean();
@@ -42,11 +40,11 @@ public class Main {
                 }
 
                 switch (actionsMenuOptionsEnum) {
-                    case INSERT -> systemServiceBean.insertMenu(mainMenuOptionsEnum, actionsMenuOptionsEnum, dataVO);
-                    case VIEW -> systemServiceBean.viewMenu(mainMenuOptionsEnum, actionsMenuOptionsEnum, dataVO);
-                    case UPDATE -> systemServiceBean.updateMenu(mainMenuOptionsEnum, actionsMenuOptionsEnum, dataVO);
-                    case DELETE -> systemServiceBean.deleteMenu(mainMenuOptionsEnum, actionsMenuOptionsEnum, dataVO);
-                    case CLEAR_ALL -> systemServiceBean.clearListMenu(mainMenuOptionsEnum, actionsMenuOptionsEnum, dataVO);
+                    case INSERT -> systemServiceBean.insertMenu(mainMenuOptionsEnum, dataVO);
+                    case VIEW -> systemServiceBean.viewMenu(mainMenuOptionsEnum, dataVO);
+                    case UPDATE -> systemServiceBean.updateMenu(mainMenuOptionsEnum, dataVO);
+                    case DELETE -> systemServiceBean.deleteMenu(mainMenuOptionsEnum, dataVO);
+                    case CLEAR_ALL -> systemServiceBean.clearListMenu(mainMenuOptionsEnum, dataVO);
                 }
             }
         }

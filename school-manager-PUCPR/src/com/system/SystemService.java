@@ -4,21 +4,19 @@ import com.enums.ActionsMenuOptionsEnum;
 import com.enums.MainMenuOptionsEnum;
 import com.objects.DataVO;
 
-import java.util.HashMap;
-
 public interface SystemService {
 
     MainMenuOptionsEnum showMainMenu();
 
     ActionsMenuOptionsEnum showSecundaryMenu(MainMenuOptionsEnum mainMenuOptionsEnum);
 
-    void insertMenu(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum, DataVO dataVOp);
+    void insertMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVOp);
 
-    void viewMenu(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum, DataVO dataVO);
+    void viewMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO);
 
-    void updateMenu(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum, DataVO dataVO);
+    void updateMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO);
 
-    void deleteMenu(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum, DataVO dataVO);
+    void deleteMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO);
 
-    void clearListMenu(MainMenuOptionsEnum mainMenuOptionsEnum, ActionsMenuOptionsEnum actionsMenuOptionsEnum, DataVO dataVO);
+    void clearListMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO);
 }
