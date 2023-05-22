@@ -2,9 +2,18 @@ package com.objects;
 
 public class Person {
 
+    private int code;
     private String name;
-    private Integer cpf;
     private Integer age;
+    private Long federalIdentification;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 
     public String getName() {
         return name;
@@ -14,12 +23,12 @@ public class Person {
         this.name = name;
     }
 
-    public Integer getCpf() {
-        return cpf;
+    public Long getFederalIdentification() {
+        return federalIdentification;
     }
 
-    public void setCpf(Integer cpf) {
-        this.cpf = cpf;
+    public void setFederalIdentification(Long federalIdentification) {
+        this.federalIdentification = federalIdentification;
     }
 
     public Integer getAge() {
