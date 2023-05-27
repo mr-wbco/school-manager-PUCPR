@@ -23,6 +23,8 @@ public class StudentServiceBean implements StudentService {
             Student student = new Student(studentCode, studentName, studentAge, studentFederalIdentification);
             dataVO.getStudentList().add(dataVO.getStudentList().size(), student);
 
+            this.saveStudent(dataVO);
+
             System.out.printf(("\nO estudante %s foi adicionado com sucesso.") + "%n", student.getName().toUpperCase());
         } else {
             System.out.println("\nNão foi possível adicionar. Estudante já cadastrado no sistema.");
@@ -99,6 +101,11 @@ public class StudentServiceBean implements StudentService {
         } else {
             System.out.println("A exclusão foi cancelada.");
         }
+    }
+
+    private void saveStudent(DataVO dataVO) {
+        StudentBO.writeStudent("c:\\temp\\arqObjs.txt", dataVO.getStudentList().get(0));
+        StudentBO.readStudent("c:\\temp\\arqObjs.txt");
     }
 
     private int generateStudentCode() {
