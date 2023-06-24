@@ -19,7 +19,7 @@ public class Main {
             MainMenuOptionsEnum mainMenuOptionsEnum = systemServiceBean.showMainMenu();
 
             if (mainMenuOptionsEnum == null) {
-                System.out.println(UTILS.translate(UTILS.INCORRET_NUMBER_ERROR_MESSAGE));
+                System.out.println(UTILS.translate(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE));
                 UTILS.pressEnterToContinue();
                 continue;
             }
@@ -33,7 +33,7 @@ public class Main {
                 ActionsMenuOptionsEnum actionsMenuOptionsEnum = systemServiceBean.showSecundaryMenu(mainMenuOptionsEnum);
 
                 if (actionsMenuOptionsEnum == null) {
-                    System.out.println(UTILS.translate(UTILS.INCORRET_NUMBER_ERROR_MESSAGE));
+                    System.out.println(UTILS.translate(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE));
                     UTILS.pressEnterToContinue();
                     continue;
                 }

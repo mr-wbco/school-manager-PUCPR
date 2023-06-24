@@ -1,7 +1,7 @@
 package com.student;
 
 import com.objects.DataVO;
-import com.objects.Student;
+import com.entity.Student;
 import com.system.SystemBO;
 import com.utils.UTILS;
 

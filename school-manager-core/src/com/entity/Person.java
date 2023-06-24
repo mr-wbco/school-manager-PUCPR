@@ -1,4 +1,4 @@
-package com.objects;
+package com.entity;
 
 import java.io.Serial;
 import java.io.Serializable;

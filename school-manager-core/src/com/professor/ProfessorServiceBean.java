@@ -1,7 +1,7 @@
 package com.professor;
 
 import com.objects.DataVO;
-import com.objects.Professor;
+import com.entity.Professor;
 import com.system.SystemBO;
 import com.utils.UTILS;
 

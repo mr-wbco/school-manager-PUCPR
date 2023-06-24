@@ -1,10 +1,9 @@
 package com.system;
 
+import com.entity.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.objects.DataVO;
-import com.objects.Professor;
-import com.objects.Student;
 
 import javax.json.*;
 import java.io.*;
@@ -33,6 +32,9 @@ public class SystemBO {
 
             processStudents(jsonObject.getJsonArray("studentList"), dataVO);
             processProfessors(jsonObject.getJsonArray("professorList"), dataVO);
+            processSubjects(jsonObject.getJsonArray("subjectList"), dataVO);
+            processClassrooms(jsonObject.getJsonArray("classroomList"), dataVO);
+            processEnrollings(jsonObject.getJsonArray("enrollingList"), dataVO);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,6 +64,42 @@ public class SystemBO {
                 long professorFederalIdentification = professorObject.getInt("federalIdentification");
                 Professor professor = new Professor(professorCode, professorName, professorAge, professorFederalIdentification);
                 dataVO.getProfessorList().add(professor);
+            }
+        }
+    }
+
+    private void processSubjects(JsonArray subjectArray, DataVO dataVO) {
+        for (JsonValue jsonValue : subjectArray) {
+            if (jsonValue.getValueType() == JsonValue.ValueType.OBJECT) {
+                JsonObject subjectObject = (JsonObject) jsonValue;
+                int subjectCode = subjectObject.getInt("subjectCode");
+                String subjectName = subjectObject.getString("subjectName");
+                Subject subject = new Subject(subjectCode, subjectName);
+                dataVO.getSubjectList().add(subject);
+            }
+        }
+    }
+
+    private void processClassrooms(JsonArray classroomArray, DataVO dataVO) {
+        for (JsonValue jsonValue : classroomArray) {
+            if (jsonValue.getValueType() == JsonValue.ValueType.OBJECT) {
+                JsonObject classroomObject = (JsonObject) jsonValue;
+                int classroomCode = classroomObject.getInt("classroomCode");
+                String classroomName = classroomObject.getString("classroomName");
+                Classroom classroom = new Classroom(classroomCode, classroomName);
+                dataVO.getClassroomList().add(classroom);
+            }
+        }
+    }
+
+    private void processEnrollings(JsonArray enrollingArray, DataVO dataVO) {
+        for (JsonValue jsonValue : enrollingArray) {
+            if (jsonValue.getValueType() == JsonValue.ValueType.OBJECT) {
+                JsonObject enrollingObject = (JsonObject) jsonValue;
+                int enrollingCode = enrollingObject.getInt("enrollingCode");
+                String enrollingName = enrollingObject.getString("enrollingName");
+                Enrolling enrolling = new Enrolling(enrollingCode, enrollingName);
+                dataVO.getEnrollingList().add(enrolling);
             }
         }
     }
