@@ -1,6 +1,7 @@
 import com.enums.ActionsMenuOptionsEnum;
 import com.enums.MainMenuOptionsEnum;
 import com.objects.DataVO;
+import com.system.SystemBO;
 import com.system.SystemServiceBean;
 import com.utils.UTILS;
 
@@ -11,6 +12,8 @@ public class Main {
     public static void main(String[] args) {
 
         DataVO dataVO = new DataVO();
+        SystemBO systemBO = new SystemBO();
+        systemBO.readData(SystemBO.DATA_JSON_FILE_NAME, dataVO);
 
         while (true) {
             MainMenuOptionsEnum mainMenuOptionsEnum = systemServiceBean.showMainMenu();

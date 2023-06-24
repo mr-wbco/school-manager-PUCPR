@@ -13,6 +13,13 @@ public class Person implements Serializable {
     private Integer age;
     private Long federalIdentification;
 
+    public Person(int code, String name, Integer age, Long federalIdentification) {
+        this.code = code;
+        this.name = name;
+        this.age = age;
+        this.federalIdentification = federalIdentification;
+    }
+
     public int getCode() {
         return code;
     }

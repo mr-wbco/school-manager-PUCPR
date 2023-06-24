@@ -2,7 +2,7 @@ package com.professor;
 
 import com.objects.DataVO;
 import com.objects.Professor;
-import com.objects.Student;
+import com.system.SystemBO;
 import com.utils.UTILS;
 
 import java.util.List;
@@ -15,33 +15,32 @@ public class ProfessorServiceBean implements ProfessorService {
         UTILS.printHeaderManager();
         System.out.println("INSERINDO NOVO PROFESSOR");
 
-        int professorCode = this.generateProfessorCode();
-        String professorName = this.generateProfessorName();
-        int professorAge = this.generateProfessorAge();
-        long professorFederalIdentification = this.generateProfessorFederalIdentification();
+        Professor professor = this.createNewProfessor();
 
-        if (!this.professorAlreadyExists(professorCode, professorFederalIdentification, professorName, dataVO.getProfessorList())) {
-            Professor professor = new Professor(professorCode, professorName, professorAge, professorFederalIdentification);
-            dataVO.getProfessorList().add(dataVO.getProfessorList().size(), professor);
-
-            System.out.printf(("\nO professor %s foi adicionado com sucesso.") + "%n", professor.getName().toUpperCase());
-        } else {
+        if (this.professorAlreadyExists(professor, dataVO.getProfessorList())) {
             System.out.println("\nNão foi possível adicionar. Professor já cadastrado no sistema.");
+            return;
         }
+
+        dataVO.getProfessorList().add(dataVO.getProfessorList().size(), professor);
+        this.saveProfessor(dataVO);
+
+        System.out.printf(("\nO professor %s foi adicionado com sucesso.") + "%n", professor.getName().toUpperCase());
     }
 
     @Override
     public void viewProfessorList(DataVO dataVO) {
-        if (dataVO.getProfessorList() != null && !dataVO.getProfessorList().isEmpty()) {
-            for (Professor student : dataVO.getProfessorList()) {
-                System.out.println(" ");
-                System.out.println("CÓDIGO: " + student.getCode());
-                System.out.println("NOME: " + student.getName().toUpperCase());
-                System.out.println("IDADE: " + student.getAge());
-                System.out.println("CPF: " + student.getFederalIdentification());
-            }
-        } else {
+        if (dataVO.getProfessorList() == null || dataVO.getProfessorList().isEmpty()) {
             System.out.println("\nNão há professores cadastrados!\n");
+            return;
+        }
+
+        for (Professor professor : dataVO.getProfessorList()) {
+            System.out.println(" ");
+            System.out.println("CÓDIGO: " + professor.getCode());
+            System.out.println("NOME: " + professor.getName().toUpperCase());
+            System.out.println("IDADE: " + professor.getAge());
+            System.out.println("CPF: " + professor.getFederalIdentification());
         }
     }
 
@@ -85,6 +84,7 @@ public class ProfessorServiceBean implements ProfessorService {
         }
 
         dataVO.getProfessorList().remove(professorToDelete);
+        this.saveProfessor(dataVO);
         System.out.printf(("Professor %s removido com sucesso.") + "%n", professorToDelete.getName().toUpperCase());
     }
 
@@ -94,12 +94,23 @@ public class ProfessorServiceBean implements ProfessorService {
 
         int choice = UTILS.scannerIntValue();
 
-        if(choice == 1) {
-            dataVO.getProfessorList().clear();
-            System.out.println("Todos os registros foram excluídos com sucesso.");
-        } else {
+        if (choice != 1) {
             System.out.println("A exclusão foi cancelada.");
+            return;
         }
+
+        dataVO.getProfessorList().clear();
+        this.saveProfessor(dataVO);
+        System.out.println("Todos os registros foram excluídos com sucesso.");
+    }
+
+    private Professor createNewProfessor() {
+        int professorCode = this.generateProfessorCode();
+        String professorName = this.generateProfessorName();
+        int professorAge = this.generateProfessorAge();
+        long professorFederalIdentification = this.generateProfessorFederalIdentification();
+
+        return new Professor(professorCode, professorName, professorAge, professorFederalIdentification);
     }
 
     private int generateProfessorCode() {
@@ -122,9 +133,9 @@ public class ProfessorServiceBean implements ProfessorService {
         return UTILS.scannerLongValue();
     }
 
-    public boolean professorAlreadyExists(int newProfessorCode, Long newFederalIdentification, String newProfessorName, List<Professor> professorList) {
-        for (Professor professor : professorList) {
-            if (professor.getCode() == newProfessorCode || professor.getFederalIdentification().equals(newFederalIdentification) || professor.getName().equals(newProfessorName)) {
+    public boolean professorAlreadyExists(Professor newProfessor, List<Professor> professorList) {
+        for (Professor professorFromList : professorList) {
+            if (professorFromList.getCode() == newProfessor.getCode() || professorFromList.getName().equals(newProfessor.getName()) || professorFromList.getFederalIdentification().equals(newProfessor.getFederalIdentification())) {
                 return true;
             }
         }
@@ -153,20 +164,25 @@ public class ProfessorServiceBean implements ProfessorService {
     }
 
     private Professor findProfessor(DataVO dataVO) {
-        int studentCode = this.generateProfessorCode();
+        int professorCodeToUpdateOrDelete = this.generateProfessorCode();
 
-        Professor professorToUpdate = null;
-        for (Professor professor : dataVO.getProfessorList()) {
-            if (professor.getCode() == studentCode) {
-                professorToUpdate = professor;
+        Professor professorToUpdateOrDelete = null;
+        for (Professor professorFromList : dataVO.getProfessorList()) {
+            if (professorFromList.getCode() == professorCodeToUpdateOrDelete) {
+                professorToUpdateOrDelete = professorFromList;
                 break;
             }
         }
 
-        if (professorToUpdate == null) {
-            System.out.printf(("Professor com o código %s não encontrado") + "%n", studentCode);
+        if (professorToUpdateOrDelete == null) {
+            System.out.printf(("Professor com o código %s não encontrado") + "%n", professorCodeToUpdateOrDelete);
         }
 
-        return professorToUpdate;
+        return professorToUpdateOrDelete;
+    }
+
+    private void saveProfessor(DataVO dataVO) {
+        SystemBO systemBO = new SystemBO();
+        systemBO.writeData(SystemBO.DATA_JSON_FILE_NAME, dataVO);
     }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataVO {
+
     private List<Student> studentList = new ArrayList<>();
     private List<Professor> professorList = new ArrayList<>();
 

@@ -2,6 +2,7 @@ package com.student;
 
 import com.objects.DataVO;
 import com.objects.Student;
+import com.system.SystemBO;
 import com.utils.UTILS;
 
 import java.util.List;
@@ -14,35 +15,32 @@ public class StudentServiceBean implements StudentService {
         UTILS.printHeaderManager();
         System.out.println("INSERINDO NOVO ESTUDANTE");
 
-        int studentCode = this.generateStudentCode();
-        String studentName = this.generateStudentName();
-        int studentAge = this.generateStudentAge();
-        long studentFederalIdentification = this.generateStudentFederalIdentification();
+        Student student = this.createNewStudent();
 
-        if (!this.studentAlreadyExists(studentCode, studentFederalIdentification, studentName, dataVO.getStudentList())) {
-            Student student = new Student(studentCode, studentName, studentAge, studentFederalIdentification);
-            dataVO.getStudentList().add(dataVO.getStudentList().size(), student);
-
-            this.saveStudent(dataVO);
-
-            System.out.printf(("\nO estudante %s foi adicionado com sucesso.") + "%n", student.getName().toUpperCase());
-        } else {
+        if (this.studentAlreadyExists(student, dataVO.getStudentList())) {
             System.out.println("\nNão foi possível adicionar. Estudante já cadastrado no sistema.");
+            return;
         }
+
+        dataVO.getStudentList().add(dataVO.getStudentList().size(), student);
+        this.saveStudent(dataVO);
+
+        System.out.printf(("\nO estudante %s foi adicionado com sucesso.") + "%n", student.getName().toUpperCase());
     }
 
     @Override
     public void viewStudentList(DataVO dataVO) {
-        if (dataVO.getStudentList() != null && !dataVO.getStudentList().isEmpty()) {
-            for (Student student : dataVO.getStudentList()) {
-                System.out.println(" ");
-                System.out.println("CÓDIGO: " + student.getCode());
-                System.out.println("NOME: " + student.getName().toUpperCase());
-                System.out.println("IDADE: " + student.getAge());
-                System.out.println("CPF: " + student.getFederalIdentification());
-            }
-        } else {
+        if (dataVO.getStudentList() == null || dataVO.getStudentList().isEmpty()) {
             System.out.println("\nNão há estudantes cadastrados!\n");
+            return;
+        }
+
+        for (Student student : dataVO.getStudentList()) {
+            System.out.println(" ");
+            System.out.println("CÓDIGO: " + student.getCode());
+            System.out.println("NOME: " + student.getName().toUpperCase());
+            System.out.println("IDADE: " + student.getAge());
+            System.out.println("CPF: " + student.getFederalIdentification());
         }
     }
 
@@ -63,13 +61,16 @@ public class StudentServiceBean implements StudentService {
         int studentAge = this.generateStudentAge();
         long studentFederalIdentification = this.generateStudentFederalIdentification();
 
-        if (!this.studentNameAlreadyExists(studentName, dataVO.getStudentList()) || !this.studentFederalIdentificationAlreadyExists(studentFederalIdentification, dataVO.getStudentList())) {
-            studentToUpdate.setName(studentName);
-            studentToUpdate.setAge(studentAge);
-            studentToUpdate.setFederalIdentification(studentFederalIdentification);
-        } else {
+        if (this.studentNameAlreadyExists(studentName, dataVO.getStudentList()) || this.studentFederalIdentificationAlreadyExists(studentFederalIdentification, dataVO.getStudentList())) {
             System.out.println("\nNão foi possível adicionar. Estudante já cadastrado no sistema.");
+            return;
         }
+
+        studentToUpdate.setName(studentName);
+        studentToUpdate.setAge(studentAge);
+        studentToUpdate.setFederalIdentification(studentFederalIdentification);
+
+        this.saveStudent(dataVO);
     }
 
     @Override
@@ -86,6 +87,7 @@ public class StudentServiceBean implements StudentService {
         }
 
         dataVO.getStudentList().remove(studentToDelete);
+        this.saveStudent(dataVO);
         System.out.printf(("Estudante %s removido com sucesso.") + "%n", studentToDelete.getName().toUpperCase());
     }
 
@@ -95,17 +97,23 @@ public class StudentServiceBean implements StudentService {
 
         int choice = UTILS.scannerIntValue();
 
-        if(choice == 1) {
-            dataVO.getStudentList().clear();
-            System.out.println("Todos os registros foram excluídos com sucesso.");
-        } else {
+        if (choice != 1){
             System.out.println("A exclusão foi cancelada.");
+            return;
         }
+
+        dataVO.getStudentList().clear();
+        this.saveStudent(dataVO);
+        System.out.println("Todos os registros foram excluídos com sucesso.");
     }
 
-    private void saveStudent(DataVO dataVO) {
-        StudentBO.writeStudent("c:\\temp\\arqObjs.txt", dataVO.getStudentList().get(0));
-        StudentBO.readStudent("c:\\temp\\arqObjs.txt");
+    private Student createNewStudent() {
+        int studentCode = this.generateStudentCode();
+        String studentName = this.generateStudentName();
+        int studentAge = this.generateStudentAge();
+        long studentFederalIdentification = this.generateStudentFederalIdentification();
+
+        return new Student(studentCode, studentName, studentAge, studentFederalIdentification);
     }
 
     private int generateStudentCode() {
@@ -128,9 +136,9 @@ public class StudentServiceBean implements StudentService {
         return UTILS.scannerLongValue();
     }
 
-    public boolean studentAlreadyExists(int newStudentCode, Long newFederalIdentification, String newStudentName, List<Student> studentList) {
-        for (Student student : studentList) {
-            if (student.getCode() == newStudentCode || student.getFederalIdentification().equals(newFederalIdentification) || student.getName().equals(newStudentName)) {
+    public boolean studentAlreadyExists(Student newStudent, List<Student> studentList) {
+        for (Student studentFromList : studentList) {
+            if (studentFromList.getCode() == newStudent.getCode() || studentFromList.getName().equals(newStudent.getName()) || studentFromList.getFederalIdentification().equals(newStudent.getFederalIdentification())) {
                 return true;
             }
         }
@@ -159,20 +167,25 @@ public class StudentServiceBean implements StudentService {
     }
 
     private Student findStudent(DataVO dataVO) {
-        int studentCode = this.generateStudentCode();
+        int studentCodeToUpdateOrDelete = this.generateStudentCode();
 
-        Student studentToUpdate = null;
-        for (Student student : dataVO.getStudentList()) {
-            if (student.getCode() == studentCode) {
-                studentToUpdate = student;
+        Student studentToUpdateOrDelete = null;
+        for (Student studentFromList : dataVO.getStudentList()) {
+            if (studentFromList.getCode() == studentCodeToUpdateOrDelete) {
+                studentToUpdateOrDelete = studentFromList;
                 break;
             }
         }
 
-        if (studentToUpdate == null) {
-            System.out.printf(("Estudante com o código %s não encontrado") + "%n", studentCode);
+        if (studentToUpdateOrDelete == null) {
+            System.out.printf(("Estudante com o código %s não encontrado") + "%n", studentCodeToUpdateOrDelete);
         }
 
-        return studentToUpdate;
+        return studentToUpdateOrDelete;
+    }
+
+    private void saveStudent(DataVO dataVO) {
+        SystemBO systemBO = new SystemBO();
+        systemBO.writeData(SystemBO.DATA_JSON_FILE_NAME, dataVO);
     }
 }
