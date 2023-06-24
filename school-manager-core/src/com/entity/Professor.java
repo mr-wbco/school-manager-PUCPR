@@ -1,4 +1,4 @@
-package com.objects;
+package com.entity;
 
 public class Professor extends Person {
 

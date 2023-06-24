@@ -1,4 +1,7 @@
 {
   "studentList": [],
-  "professorList": []
+  "professorList": [],
+  "subjectList": [],
+  "classroomList": [],
+  "enrollingList": []
 }

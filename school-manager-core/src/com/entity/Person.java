@@ -1,4 +1,4 @@
-package com.objects;
+package com.entity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -7,6 +7,11 @@ public class Person implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
+
+    public final static String CODE = "code";
+    public final static String NAME = "name";
+    public final static String AGE = "age";
+    public final static String FEDERAL_IDENTIFICATION = "federalIdentification";
 
     private int code;
     private String name;

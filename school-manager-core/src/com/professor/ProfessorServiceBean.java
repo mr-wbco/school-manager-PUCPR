@@ -1,7 +1,7 @@
 package com.professor;
 
 import com.objects.DataVO;
-import com.objects.Professor;
+import com.entity.Professor;
 import com.system.SystemBO;
 import com.utils.UTILS;
 
@@ -13,25 +13,25 @@ public class ProfessorServiceBean implements ProfessorService {
     @Override
     public void insertNewProfessor(DataVO dataVO) {
         UTILS.printHeaderManager();
-        System.out.println("INSERINDO NOVO PROFESSOR");
+        UTILS.printConsoleMessage(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
 
         Professor professor = this.createNewProfessor();
 
         if (this.professorAlreadyExists(professor, dataVO.getProfessorList())) {
-            System.out.println("\nNão foi possível adicionar. Professor já cadastrado no sistema.");
+            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
         dataVO.getProfessorList().add(dataVO.getProfessorList().size(), professor);
         this.saveProfessor(dataVO);
 
-        System.out.printf(("\nO professor %s foi adicionado com sucesso.") + "%n", professor.getName().toUpperCase());
+        UTILS.printConsoleMessage(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
     }
 
     @Override
     public void viewProfessorList(DataVO dataVO) {
         if (dataVO.getProfessorList() == null || dataVO.getProfessorList().isEmpty()) {
-            System.out.println("\nNão há professores cadastrados!\n");
+            UTILS.printConsoleMessage(UTILS.EMPTY_LIST_ERROR_MESSAGE);
             return;
         }
 
@@ -61,13 +61,15 @@ public class ProfessorServiceBean implements ProfessorService {
         int studentAge = this.generateProfessorAge();
         long studentFederalIdentification = this.generateProfessorFederalIdentification();
 
-        if (!this.professorNameAlreadyExists(studentName, dataVO.getProfessorList()) || !this.professorFederalIdentificationAlreadyExists(studentFederalIdentification, dataVO.getProfessorList())) {
-            professorToUpdate.setName(studentName);
-            professorToUpdate.setAge(studentAge);
-            professorToUpdate.setFederalIdentification(studentFederalIdentification);
-        } else {
-            System.out.println("\nNão foi possível adicionar. Professor já cadastrado no sistema.");
+        if (this.professorNameAlreadyExists(studentName, dataVO.getProfessorList()) || this.professorFederalIdentificationAlreadyExists(studentFederalIdentification, dataVO.getProfessorList())) {
+            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
+            return;
         }
+
+        professorToUpdate.setName(studentName);
+        professorToUpdate.setAge(studentAge);
+        professorToUpdate.setFederalIdentification(studentFederalIdentification);
+        this.saveProfessor(dataVO);
     }
 
     @Override
@@ -85,23 +87,23 @@ public class ProfessorServiceBean implements ProfessorService {
 
         dataVO.getProfessorList().remove(professorToDelete);
         this.saveProfessor(dataVO);
-        System.out.printf(("Professor %s removido com sucesso.") + "%n", professorToDelete.getName().toUpperCase());
+        UTILS.printConsoleMessage(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
     }
 
     @Override
     public void clearProfessorList(DataVO dataVO) {
-        System.out.println("\nConfirma exclusão de todos os registros? Esta ação não poderá ser desfeita. (1) CONFIRMAR EXCLUSÃO / (2) CANCELAR");
+        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         int choice = UTILS.scannerIntValue();
 
         if (choice != 1) {
-            System.out.println("A exclusão foi cancelada.");
+            UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
             return;
         }
 
         dataVO.getProfessorList().clear();
         this.saveProfessor(dataVO);
-        System.out.println("Todos os registros foram excluídos com sucesso.");
+        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
     }
 
     private Professor createNewProfessor() {
@@ -114,22 +116,22 @@ public class ProfessorServiceBean implements ProfessorService {
     }
 
     private int generateProfessorCode() {
-        System.out.println("\nDigite o código do professor (somente números):");
+        UTILS.printConsoleMessage(UTILS.CODE);
         return UTILS.scannerIntValue();
     }
 
     private String generateProfessorName() {
-        System.out.println("\nDigite o nome do professor:");
+        UTILS.printConsoleMessage(UTILS.NAME);
         return new Scanner(System.in).nextLine();
     }
 
     private int generateProfessorAge() {
-        System.out.println("\nDigite a idade do professor:");
+        UTILS.printConsoleMessage(UTILS.AGE);
         return UTILS.scannerIntValue();
     }
 
     private long generateProfessorFederalIdentification() {
-        System.out.println("\nDigite o CPF do professor:");
+        UTILS.printConsoleMessage(UTILS.FEDERAL_IDENTIFICATION);
         return UTILS.scannerLongValue();
     }
 
@@ -175,7 +177,7 @@ public class ProfessorServiceBean implements ProfessorService {
         }
 
         if (professorToUpdateOrDelete == null) {
-            System.out.printf(("Professor com o código %s não encontrado") + "%n", professorCodeToUpdateOrDelete);
+            UTILS.printConsoleMessage(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
         }
 
         return professorToUpdateOrDelete;

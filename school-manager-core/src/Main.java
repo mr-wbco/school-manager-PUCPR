@@ -11,21 +11,19 @@ public class Main {
 
     public static void main(String[] args) {
 
-        DataVO dataVO = new DataVO();
-        SystemBO systemBO = new SystemBO();
-        systemBO.readData(SystemBO.DATA_JSON_FILE_NAME, dataVO);
+        DataVO dataVO = new SystemBO().readData(SystemBO.DATA_JSON_FILE_NAME);
 
         while (true) {
             MainMenuOptionsEnum mainMenuOptionsEnum = systemServiceBean.showMainMenu();
 
             if (mainMenuOptionsEnum == null) {
-                System.out.println(UTILS.translate(UTILS.INCORRET_NUMBER_ERROR_MESSAGE));
+                UTILS.printConsoleMessage(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE);
                 UTILS.pressEnterToContinue();
                 continue;
             }
 
             if (MainMenuOptionsEnum.EXIT.equals(mainMenuOptionsEnum)) {
-                System.out.println(UTILS.translate(UTILS.EXIT_SYSTEM_MESSAGE));
+                UTILS.printConsoleMessage(UTILS.EXIT_SYSTEM_MESSAGE);
                 break;
             }
 
@@ -33,7 +31,7 @@ public class Main {
                 ActionsMenuOptionsEnum actionsMenuOptionsEnum = systemServiceBean.showSecundaryMenu(mainMenuOptionsEnum);
 
                 if (actionsMenuOptionsEnum == null) {
-                    System.out.println(UTILS.translate(UTILS.INCORRET_NUMBER_ERROR_MESSAGE));
+                    UTILS.printConsoleMessage(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE);
                     UTILS.pressEnterToContinue();
                     continue;
                 }

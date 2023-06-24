@@ -1,7 +1,7 @@
 package com.student;
 
 import com.objects.DataVO;
-import com.objects.Student;
+import com.entity.Student;
 import com.system.SystemBO;
 import com.utils.UTILS;
 
@@ -13,25 +13,25 @@ public class StudentServiceBean implements StudentService {
     @Override
     public void insertNewStudent(DataVO dataVO) {
         UTILS.printHeaderManager();
-        System.out.println("INSERINDO NOVO ESTUDANTE");
+        UTILS.printConsoleMessage(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
 
         Student student = this.createNewStudent();
 
         if (this.studentAlreadyExists(student, dataVO.getStudentList())) {
-            System.out.println("\nNão foi possível adicionar. Estudante já cadastrado no sistema.");
+            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
         dataVO.getStudentList().add(dataVO.getStudentList().size(), student);
         this.saveStudent(dataVO);
 
-        System.out.printf(("\nO estudante %s foi adicionado com sucesso.") + "%n", student.getName().toUpperCase());
+        UTILS.printConsoleMessage(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
     }
 
     @Override
     public void viewStudentList(DataVO dataVO) {
         if (dataVO.getStudentList() == null || dataVO.getStudentList().isEmpty()) {
-            System.out.println("\nNão há estudantes cadastrados!\n");
+            UTILS.printConsoleMessage(UTILS.EMPTY_LIST_ERROR_MESSAGE);
             return;
         }
 
@@ -62,14 +62,13 @@ public class StudentServiceBean implements StudentService {
         long studentFederalIdentification = this.generateStudentFederalIdentification();
 
         if (this.studentNameAlreadyExists(studentName, dataVO.getStudentList()) || this.studentFederalIdentificationAlreadyExists(studentFederalIdentification, dataVO.getStudentList())) {
-            System.out.println("\nNão foi possível adicionar. Estudante já cadastrado no sistema.");
+            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
         studentToUpdate.setName(studentName);
         studentToUpdate.setAge(studentAge);
         studentToUpdate.setFederalIdentification(studentFederalIdentification);
-
         this.saveStudent(dataVO);
     }
 
@@ -88,23 +87,23 @@ public class StudentServiceBean implements StudentService {
 
         dataVO.getStudentList().remove(studentToDelete);
         this.saveStudent(dataVO);
-        System.out.printf(("Estudante %s removido com sucesso.") + "%n", studentToDelete.getName().toUpperCase());
+        UTILS.printConsoleMessage(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
     }
 
     @Override
     public void clearStudentList(DataVO dataVO) {
-        System.out.println("\nConfirma exclusão de todos os registros? Esta ação não poderá ser desfeita. (1) CONFIRMAR EXCLUSÃO / (2) CANCELAR");
+        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         int choice = UTILS.scannerIntValue();
 
-        if (choice != 1){
-            System.out.println("A exclusão foi cancelada.");
+        if (choice != 1) {
+            UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
             return;
         }
 
         dataVO.getStudentList().clear();
         this.saveStudent(dataVO);
-        System.out.println("Todos os registros foram excluídos com sucesso.");
+        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
     }
 
     private Student createNewStudent() {
@@ -117,22 +116,22 @@ public class StudentServiceBean implements StudentService {
     }
 
     private int generateStudentCode() {
-        System.out.println("\nDigite o código do estudante (somente números):");
+        UTILS.printConsoleMessage(UTILS.CODE);
         return UTILS.scannerIntValue();
     }
 
     private String generateStudentName() {
-        System.out.println("\nDigite o nome do estudante:");
+        UTILS.printConsoleMessage(UTILS.NAME);
         return new Scanner(System.in).nextLine();
     }
 
     private int generateStudentAge() {
-        System.out.println("\nDigite a idade do estudante:");
+        UTILS.printConsoleMessage(UTILS.AGE);
         return UTILS.scannerIntValue();
     }
 
     private long generateStudentFederalIdentification() {
-        System.out.println("\nDigite o CPF do estudante:");
+        UTILS.printConsoleMessage(UTILS.FEDERAL_IDENTIFICATION);
         return UTILS.scannerLongValue();
     }
 
@@ -178,7 +177,7 @@ public class StudentServiceBean implements StudentService {
         }
 
         if (studentToUpdateOrDelete == null) {
-            System.out.printf(("Estudante com o código %s não encontrado") + "%n", studentCodeToUpdateOrDelete);
+            UTILS.printConsoleMessage(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
         }
 
         return studentToUpdateOrDelete;

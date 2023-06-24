@@ -1,37 +1,34 @@
 package com.system;
 
+import com.classroom.ClassroomServiceBean;
+import com.enrolling.EnrollingServiceBean;
 import com.enums.ActionsMenuOptionsEnum;
 import com.enums.MainMenuOptionsEnum;
 import com.objects.DataVO;
 import com.professor.ProfessorServiceBean;
 import com.student.StudentServiceBean;
+import com.subject.SubjectServiceBean;
 import com.utils.UTILS;
 
 import java.util.Scanner;
 
 public class SystemServiceBean implements SystemService {
 
-    public static StudentServiceBean studentServiceBean = new StudentServiceBean();
-    public static ProfessorServiceBean professorServiceBean = new ProfessorServiceBean();
+    public StudentServiceBean studentServiceBean = new StudentServiceBean();
+    public ProfessorServiceBean professorServiceBean = new ProfessorServiceBean();
+    public SubjectServiceBean subjectServiceBean = new SubjectServiceBean();
+    public ClassroomServiceBean classroomServiceBean = new ClassroomServiceBean();
+    public EnrollingServiceBean enrollingServiceBean = new EnrollingServiceBean();
 
     @Override
     public MainMenuOptionsEnum showMainMenu() {
         UTILS.printHeaderManager();
-
-        System.out.println("Você está em: [MENU PRINCIPAL]");
-        System.out.println("(1) Gerenciar Estudantes");
-        System.out.println("(2) Gerenciar Professores");
-        System.out.println("(3) Gerenciar Disciplinas");
-        System.out.println("(4) Gerenciar Turmas");
-        System.out.println("(5) Gerenciar Matrículas");
-        System.out.println("(0) Sair");
-        System.out.println(" ");
-        System.out.println("Digite a opcão desejada: ");
+        UTILS.printMainMenuOptions();
 
         while (true) {
             try {
-                MainMenuOptionsEnum mainMenuOptionsEnum = null;
                 int option = new Scanner(System.in).nextInt();
+                MainMenuOptionsEnum mainMenuOptionsEnum = null;
 
                 switch (option) {
                     case 1 -> mainMenuOptionsEnum = MainMenuOptionsEnum.STUDENT;
@@ -45,7 +42,7 @@ public class SystemServiceBean implements SystemService {
                 return mainMenuOptionsEnum;
 
             } catch (Exception e) {
-                System.out.println(UTILS.translate(UTILS.INCORRET_NUMBER_ERROR_MESSAGE));
+                UTILS.printConsoleMessage(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE);
                 UTILS.pressEnterToContinue();
             }
         }
@@ -54,21 +51,12 @@ public class SystemServiceBean implements SystemService {
     @Override
     public ActionsMenuOptionsEnum showSecundaryMenu(MainMenuOptionsEnum mainMenuOptionsEnum) {
         UTILS.printHeaderManager();
-
-        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s]") + "%n", UTILS.translate(mainMenuOptionsEnum.toString()));
-        System.out.println("(1) Incluir");
-        System.out.println("(2) Listar");
-        System.out.println("(3) Atualizar");
-        System.out.println("(4) Remover");
-        System.out.println("(5) Limpar todos os registros");
-        System.out.println("(0) Voltar ao menu principal");
-        System.out.println(" ");
-        System.out.println("Digite a opcão desejada: ");
+        UTILS.printSecundaryMenuOptions(mainMenuOptionsEnum.toString());
 
         while (true) {
             try {
-                ActionsMenuOptionsEnum actionsMenuOptionsEnum = null;
                 int option = new Scanner(System.in).nextInt();
+                ActionsMenuOptionsEnum actionsMenuOptionsEnum = null;
 
                 switch (option) {
                     case 1 -> actionsMenuOptionsEnum = ActionsMenuOptionsEnum.INSERT;
@@ -82,7 +70,7 @@ public class SystemServiceBean implements SystemService {
                 return actionsMenuOptionsEnum;
 
             } catch (Exception e) {
-                System.out.println(UTILS.translate(UTILS.INCORRET_NUMBER_ERROR_MESSAGE));
+                UTILS.printConsoleMessage(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE);
                 UTILS.pressEnterToContinue();
             }
         }
@@ -91,16 +79,15 @@ public class SystemServiceBean implements SystemService {
     @Override
     public void insertMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO) {
         UTILS.printHeaderManager();
-
-        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s] > [INCLUIR NOVO]") + "%n", UTILS.translate(mainMenuOptionsEnum.toString()));
+        UTILS.printCurrentSecundaryMenuPosition(mainMenuOptionsEnum.toString(), UTILS.INSERT_NEW);
 
         switch (mainMenuOptionsEnum) {
-            case STUDENT -> studentServiceBean.insertNewStudent(dataVO);
-            case PROFESSOR -> professorServiceBean.insertNewProfessor(dataVO);
-            case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
-            case CLASS -> System.out.println("INSERINDO NOVA TURMA");
-            case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
-            case EXIT -> System.out.println("RETORNANDO AO MENU ANTERIOR");
+            case STUDENT -> this.studentServiceBean.insertNewStudent(dataVO);
+            case PROFESSOR -> this.professorServiceBean.insertNewProfessor(dataVO);
+            case SUBJECT -> this.subjectServiceBean.insertNewSubject(dataVO);
+            case CLASS -> this.classroomServiceBean.insertNewClassroom(dataVO);
+            case ENROLLING -> this.enrollingServiceBean.insertNewEnrolling(dataVO);
+            case EXIT -> UTILS.printConsoleMessage(UTILS.BACK_TO_MAIN_MENU_MESSAGE);
         }
 
         UTILS.pressEnterToContinue();
@@ -109,16 +96,15 @@ public class SystemServiceBean implements SystemService {
     @Override
     public void viewMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO) {
         UTILS.printHeaderManager();
-
-        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s] > [LISTAR TODOS]") + "%n", UTILS.translate(mainMenuOptionsEnum.toString()));
+        UTILS.printCurrentSecundaryMenuPosition(mainMenuOptionsEnum.toString(), UTILS.LIST_ALL);
 
         switch (mainMenuOptionsEnum) {
-            case STUDENT -> studentServiceBean.viewStudentList(dataVO);
-            case PROFESSOR -> professorServiceBean.viewProfessorList(dataVO);
-            case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
-            case CLASS -> System.out.println("INSERINDO NOVA TURMA");
-            case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
-            case EXIT -> System.out.println("RETORNANDO AO MENU ANTERIOR");
+            case STUDENT -> this.studentServiceBean.viewStudentList(dataVO);
+            case PROFESSOR -> this.professorServiceBean.viewProfessorList(dataVO);
+            case SUBJECT -> this.subjectServiceBean.viewSubjectList(dataVO);
+            case CLASS -> this.classroomServiceBean.viewClassroomList(dataVO);
+            case ENROLLING -> this.enrollingServiceBean.viewEnrollingList(dataVO);
+            case EXIT -> UTILS.printConsoleMessage(UTILS.BACK_TO_MAIN_MENU_MESSAGE);
         }
 
         UTILS.pressEnterToContinue();
@@ -127,16 +113,15 @@ public class SystemServiceBean implements SystemService {
     @Override
     public void updateMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO) {
         UTILS.printHeaderManager();
-
-        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s] > [ATUALIZAR INFORMACÕES]") + "%n", UTILS.translate(mainMenuOptionsEnum.toString()));
+        UTILS.printCurrentSecundaryMenuPosition(mainMenuOptionsEnum.toString(), UTILS.UPDATE_INFORMATION);
 
         switch (mainMenuOptionsEnum) {
-            case STUDENT -> studentServiceBean.updateStudent(dataVO);
-            case PROFESSOR -> professorServiceBean.updateProfessor(dataVO);
-            case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
-            case CLASS -> System.out.println("INSERINDO NOVA TURMA");
-            case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
-            case EXIT -> System.out.println("RETORNANDO AO MENU ANTERIOR");
+            case STUDENT -> this.studentServiceBean.updateStudent(dataVO);
+            case PROFESSOR -> this.professorServiceBean.updateProfessor(dataVO);
+            case SUBJECT -> this.subjectServiceBean.updateSubject(dataVO);
+            case CLASS -> this.classroomServiceBean.updateClassroom(dataVO);
+            case ENROLLING -> this.enrollingServiceBean.updateEnrolling(dataVO);
+            case EXIT -> UTILS.printConsoleMessage(UTILS.BACK_TO_MAIN_MENU_MESSAGE);
         }
 
         UTILS.pressEnterToContinue();
@@ -145,16 +130,15 @@ public class SystemServiceBean implements SystemService {
     @Override
     public void deleteMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO) {
         UTILS.printHeaderManager();
-
-        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s] > [REMOVER REGISTRO]") + "%n", UTILS.translate(mainMenuOptionsEnum.toString()));
+        UTILS.printCurrentSecundaryMenuPosition(mainMenuOptionsEnum.toString(), UTILS.DELETE_RECORD);
 
         switch (mainMenuOptionsEnum) {
-            case STUDENT -> studentServiceBean.deleteOneStudent(dataVO);
-            case PROFESSOR -> professorServiceBean.deleteOneProfessor(dataVO);
-            case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
-            case CLASS -> System.out.println("INSERINDO NOVA TURMA");
-            case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
-            case EXIT -> System.out.println("RETORNANDO AO MENU ANTERIOR");
+            case STUDENT -> this.studentServiceBean.deleteOneStudent(dataVO);
+            case PROFESSOR -> this.professorServiceBean.deleteOneProfessor(dataVO);
+            case SUBJECT -> this.subjectServiceBean.deleteOneSubject(dataVO);
+            case CLASS -> this.classroomServiceBean.deleteOneClassroom(dataVO);
+            case ENROLLING -> this.enrollingServiceBean.deleteOneEnrolling(dataVO);
+            case EXIT -> UTILS.printConsoleMessage(UTILS.BACK_TO_MAIN_MENU_MESSAGE);
         }
 
         UTILS.pressEnterToContinue();
@@ -163,16 +147,15 @@ public class SystemServiceBean implements SystemService {
     @Override
     public void clearListMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO) {
         UTILS.printHeaderManager();
-
-        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s] > [REMOVER TODOS OS REGISTROS]") + "%n", UTILS.translate(mainMenuOptionsEnum.toString()));
+        UTILS.printCurrentSecundaryMenuPosition(mainMenuOptionsEnum.toString(), UTILS.DELETE_ALL_RECORDS);
 
         switch (mainMenuOptionsEnum) {
-            case STUDENT -> studentServiceBean.clearStudentList(dataVO);
-            case PROFESSOR -> professorServiceBean.clearProfessorList(dataVO);
-            case SUBJECT -> System.out.println("INSERINDO NOVO DISCIPLINA");
-            case CLASS -> System.out.println("INSERINDO NOVA TURMA");
-            case ENROLLING -> System.out.println("INSERINDO NOVA MATRÍCULA");
-            case EXIT -> System.out.println("RETORNANDO AO MENU ANTERIOR");
+            case STUDENT -> this.studentServiceBean.clearStudentList(dataVO);
+            case PROFESSOR -> this.professorServiceBean.clearProfessorList(dataVO);
+            case SUBJECT -> this.subjectServiceBean.clearSubjectList(dataVO);
+            case CLASS -> this.classroomServiceBean.clearClassroomList(dataVO);
+            case ENROLLING -> this.enrollingServiceBean.clearEnrollingList(dataVO);
+            case EXIT -> UTILS.printConsoleMessage(UTILS.BACK_TO_MAIN_MENU_MESSAGE);
         }
 
         UTILS.pressEnterToContinue();
