@@ -36,6 +36,7 @@ public class SystemServiceBean implements SystemService {
                     case 3 -> mainMenuOptionsEnum = MainMenuOptionsEnum.SUBJECT;
                     case 4 -> mainMenuOptionsEnum = MainMenuOptionsEnum.CLASS;
                     case 5 -> mainMenuOptionsEnum = MainMenuOptionsEnum.ENROLLING;
+                    case 9 -> mainMenuOptionsEnum = MainMenuOptionsEnum.CLEAR_ALL_DATA;
                     case 0 -> mainMenuOptionsEnum = MainMenuOptionsEnum.EXIT;
                 }
 
@@ -159,5 +160,29 @@ public class SystemServiceBean implements SystemService {
         }
 
         UTILS.pressEnterToContinue();
+    }
+
+    public void clearAllData(DataVO dataVO) {
+        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
+
+        int choice = UTILS.scannerIntValue();
+
+        if (choice != 1) {
+            UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
+            return;
+        }
+
+        dataVO.getStudentList().clear();
+        dataVO.getProfessorList().clear();
+        dataVO.getSubjectList().clear();
+        dataVO.getClassroomList().clear();
+        dataVO.getEnrollingList().clear();
+        this.saveData(dataVO);
+        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
+    }
+
+    private void saveData(DataVO dataVO) {
+        SystemBO systemBO = new SystemBO();
+        systemBO.writeData(SystemBO.DATA_JSON_FILE_NAME, dataVO);
     }
 }

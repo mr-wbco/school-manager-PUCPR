@@ -1,7 +1,12 @@
 package com.classroom;
 
 import com.entity.Classroom;
+import com.entity.Professor;
+import com.entity.Student;
+import com.entity.Subject;
 import com.objects.DataVO;
+import com.professor.ProfessorServiceBean;
+import com.subject.SubjectServiceBean;
 import com.system.SystemBO;
 import com.utils.UTILS;
 
@@ -15,7 +20,10 @@ public class ClassroomServiceBean implements ClassroomService {
         UTILS.printHeaderManager();
         UTILS.printConsoleMessage(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
 
-        Classroom classroom = this.createNewClassroom();
+        Classroom classroom = this.createNewClassroom(dataVO);
+        if (classroom == null) {
+            return;
+        }
 
         if (this.classroomAlreadyExists(classroom, dataVO.getClassroomList())) {
             UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
@@ -37,8 +45,21 @@ public class ClassroomServiceBean implements ClassroomService {
 
         for (Classroom classroom : dataVO.getClassroomList()) {
             System.out.println(" ");
-            System.out.println("CÓDIGO: " + classroom.getClassroomCode());
-            System.out.println("NOME: " + classroom.getClassroomName().toUpperCase());
+            System.out.println("CÓDIGO DA TURMA: " + classroom.getClassroomCode());
+            System.out.println("TURMA: " + classroom.getClassroomName().toUpperCase());
+            System.out.println("DISCIPLINA: " + classroom.getSubject().getSubjectName().toUpperCase());
+            System.out.println("PROFESSOR: " + classroom.getProfessor().getName().toUpperCase());
+
+            System.out.println("ESTUDANTE MATRICULADOS:");
+
+            if (classroom.getStudentList() ==  null) {
+                System.out.println("NÃO HÁ ESTUDANTES MATRICULADOS NESSA TURMA.");
+                continue;
+            }
+
+            for (Student student : classroom.getStudentList()) {
+                System.out.println("-> " + student.getName());
+            }
         }
     }
 
@@ -100,11 +121,23 @@ public class ClassroomServiceBean implements ClassroomService {
         UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
     }
 
-    private Classroom createNewClassroom() {
+    private Classroom createNewClassroom(DataVO dataVO) {
+        if (dataVO.getProfessorList() == null || dataVO.getProfessorList().isEmpty()) {
+            UTILS.printConsoleMessage(UTILS.EMPTY_PROFESSOR_LIST_ERROR_MESSAGE);
+            return null;
+        }
+
+        if (dataVO.getSubjectList() == null || dataVO.getSubjectList().isEmpty()) {
+            UTILS.printConsoleMessage(UTILS.EMPTY_SUBJECT_LIST_ERROR_MESSAGE);
+            return null;
+        }
+
         int classroomCode = this.generateClassroomCode();
         String classroomName = this.generateClassroomName();
+        Subject subject = this.generateSubject(dataVO);
+        Professor professor = this.generateProfessor(dataVO);
 
-        return new Classroom(classroomCode, classroomName);
+        return new Classroom(classroomCode, classroomName, subject, professor);
     }
 
     private int generateClassroomCode() {
@@ -116,6 +149,26 @@ public class ClassroomServiceBean implements ClassroomService {
         UTILS.printConsoleMessage(UTILS.NAME);
         return new Scanner(System.in).nextLine();
     }
+
+    private Subject generateSubject(DataVO dataVO) {
+        SubjectServiceBean subjectServiceBean = new SubjectServiceBean();
+        subjectServiceBean.viewSubjectList(dataVO);
+        return subjectServiceBean.findSubject(dataVO);
+    }
+
+    private Professor generateProfessor(DataVO dataVO) {
+        ProfessorServiceBean professorServiceBean = new ProfessorServiceBean();
+        professorServiceBean.viewProfessorList(dataVO);
+        return professorServiceBean.findProfessor(dataVO);
+    }
+
+//    private List<Student> generateStudentList(DataVO dataVO) {
+//        new StudentServiceBean().viewStudentList(dataVO);
+//        Student student = new StudentServiceBean().findStudent(dataVO);
+//        List<Student> studentList = new ArrayList<>();
+//        studentList.add(student);
+//        return studentList;
+//    }
 
     public boolean classroomAlreadyExists(Classroom newClassroom, List<Classroom> classroomList) {
         for (Classroom classroomFromList : classroomList) {
@@ -137,7 +190,7 @@ public class ClassroomServiceBean implements ClassroomService {
         return false;
     }
 
-    private Classroom findClassroom(DataVO dataVO) {
+    public Classroom findClassroom(DataVO dataVO) {
         int classroomCodeToUpdateOrDelete = this.generateClassroomCode();
 
         Classroom classroomToUpdateOrDelete = null;

@@ -9,14 +9,26 @@ public class Enrolling implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final static String ENROLLING_CODE = "enrollingCode";
-    public final static String ENROLLING_NAME = "enrollingName";
+    public final static String STUDENT_CODE = "studentCode";
+    public final static String STUDENT_NAME = "studentName";
+    public final static String CLASSROOM_CODE = "classroomCode";
+    public final static String CLASSROOM_NAME = "classroomName";
 
     private int enrollingCode;
-    private String enrollingName;
+    private int studentCode;
+    private String studentName;
+    private int classroomCode;
+    private String classroomName;
 
-    public Enrolling(int enrollingCode, String enrollingName) {
+    public Enrolling() {
+    }
+
+    public Enrolling(int enrollingCode, int studentCode, String studentName, int classroomCode, String classroomName) {
         this.enrollingCode = enrollingCode;
-        this.enrollingName = enrollingName;
+        this.studentCode = studentCode;
+        this.studentName = studentName;
+        this.classroomCode = classroomCode;
+        this.classroomName = classroomName;
     }
 
     public int getEnrollingCode() {
@@ -27,11 +39,35 @@ public class Enrolling implements Serializable {
         this.enrollingCode = enrollingCode;
     }
 
-    public String getEnrollingName() {
-        return enrollingName;
+    public int getStudentCode() {
+        return studentCode;
     }
 
-    public void setEnrollingName(String enrollingName) {
-        this.enrollingName = enrollingName;
+    public void setStudentCode(int studentCode) {
+        this.studentCode = studentCode;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public int getClassroomCode() {
+        return classroomCode;
+    }
+
+    public void setClassroomCode(int classroomCode) {
+        this.classroomCode = classroomCode;
+    }
+
+    public String getClassroomName() {
+        return classroomName;
+    }
+
+    public void setClassroomName(String classroomName) {
+        this.classroomName = classroomName;
     }
 }

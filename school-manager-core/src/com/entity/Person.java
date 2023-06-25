@@ -18,6 +18,9 @@ public class Person implements Serializable {
     private Integer age;
     private Long federalIdentification;
 
+    public Person() {
+    }
+
     public Person(int code, String name, Integer age, Long federalIdentification) {
         this.code = code;
         this.name = name;

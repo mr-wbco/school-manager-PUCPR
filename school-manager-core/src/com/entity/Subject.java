@@ -14,6 +14,9 @@ public class Subject implements Serializable {
     private int subjectCode;
     private String subjectName;
 
+    public Subject() {
+    }
+
     public Subject(int subjectCode, String subjectName) {
         this.subjectCode = subjectCode;
         this.subjectName = subjectName;

@@ -165,7 +165,7 @@ public class ProfessorServiceBean implements ProfessorService {
         return false;
     }
 
-    private Professor findProfessor(DataVO dataVO) {
+    public Professor findProfessor(DataVO dataVO) {
         int professorCodeToUpdateOrDelete = this.generateProfessorCode();
 
         Professor professorToUpdateOrDelete = null;

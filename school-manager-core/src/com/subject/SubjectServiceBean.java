@@ -103,7 +103,6 @@ public class SubjectServiceBean implements SubjectService {
     private Subject createNewSubject() {
         int subjectCode = this.generateSubjectCode();
         String subjectName = this.generateSubjectName();
-
         return new Subject(subjectCode, subjectName);
     }
 
@@ -137,7 +136,7 @@ public class SubjectServiceBean implements SubjectService {
         return false;
     }
 
-    private Subject findSubject(DataVO dataVO) {
+    public Subject findSubject(DataVO dataVO) {
         int subjectCodeToUpdateOrDelete = this.generateSubjectCode();
 
         Subject subjectToUpdateOrDelete = null;

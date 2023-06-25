@@ -19,4 +19,6 @@ public interface SystemService {
     void deleteMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO);
 
     void clearListMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO);
+
+    void clearAllData(DataVO dataVO);
 }

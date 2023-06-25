@@ -18,6 +18,10 @@ public class UTILS {
     public static final String ALREADY_EXISTS_ERROR_MESSAGE = "ALREADY_EXISTS_ERROR_MESSAGE";
     public static final String EMPTY_LIST_ERROR_MESSAGE = "EMPTY_LIST_ERROR_MESSAGE";
     public static final String CODE_NOT_FOUND_ERROR_MESSAGE = "CODE_NOT_FOUND_ERROR_MESSAGE";
+    public static final String EMPTY_STUDENT_LIST_ERROR_MESSAGE = "EMPTY_STUDENT_LIST_ERROR_MESSAGE";
+    public static final String EMPTY_PROFESSOR_LIST_ERROR_MESSAGE = "EMPTY_PROFESSOR_LIST_ERROR_MESSAGE";
+    public static final String EMPTY_CLASSROOM_LIST_ERROR_MESSAGE = "EMPTY_CLASSROOM_LIST_ERROR_MESSAGE";
+    public static final String EMPTY_SUBJECT_LIST_ERROR_MESSAGE = "EMPTY_SUBJECT_LIST_ERROR_MESSAGE";
 
     public static final String INSERT_NEW_INFORMATION_MESSAGE = "INSERT_NEW_INFORMATION_MESSAGE";
     public static final String INSERT_NEW_SUCCESS_MESSAGE = "INSERT_NEW_SUCCESS_MESSAGE";
@@ -34,6 +38,7 @@ public class UTILS {
     public static final String ENTER_TO_CONTINUE_MESSAGE = "ENTER_TO_CONTINUE_MESSAGE";
     public static final String BACK_TO_MAIN_MENU_MESSAGE = "BACK_TO_MAIN_MENU_MESSAGE";
     public static final String EXIT_SYSTEM_MESSAGE = "EXIT_SYSTEM_MESSAGE";
+    public static final String CLEAR_ALL_DATA_SYSTEM_MESSAGE = "CLEAR_ALL_DATA_SYSTEM_MESSAGE";
 
     public static String translate(String string) {
         return ResourceBundle.getBundle(MESSAGE_BUNDLE, Locale.getDefault()).getString(string);
@@ -70,6 +75,7 @@ public class UTILS {
         System.out.println("(3) Gerenciar Disciplinas");
         System.out.println("(4) Gerenciar Turmas");
         System.out.println("(5) Gerenciar Matrículas");
+        System.out.println("(9) Limpar todos os registros");
         System.out.println("(0) Sair");
         System.out.println(" ");
         System.out.println("Digite a opcão desejada: ");
@@ -104,6 +110,22 @@ public class UTILS {
             }
         }
 
+        return number;
+    }
+
+    public static int scannerIntValue2() {
+        int number = 0;
+        boolean isValidNumber = false;
+        Scanner scanner = new Scanner(System.in);
+        while (!isValidNumber) {
+            try {
+                number = scanner.nextInt();
+                isValidNumber = true;
+            } catch (Exception e) {
+                System.out.println(UTILS.translate(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE));
+                scanner.nextLine(); // Consumir a entrada inválida
+            }
+        }
         return number;
     }
 

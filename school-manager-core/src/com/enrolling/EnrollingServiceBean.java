@@ -1,12 +1,15 @@
 package com.enrolling;
 
+import com.classroom.ClassroomServiceBean;
+import com.entity.Classroom;
 import com.entity.Enrolling;
+import com.entity.Student;
 import com.objects.DataVO;
+import com.student.StudentServiceBean;
 import com.system.SystemBO;
 import com.utils.UTILS;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class EnrollingServiceBean implements EnrollingService {
 
@@ -15,18 +18,23 @@ public class EnrollingServiceBean implements EnrollingService {
         UTILS.printHeaderManager();
         UTILS.printConsoleMessage(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
 
-        Enrolling enrolling = this.createNewEnrolling();
+        Enrolling enrolling = this.createNewEnrolling(dataVO);
+        if (enrolling == null) {
+            return;
+        }
 
         if (this.enrollingAlreadyExists(enrolling, dataVO.getEnrollingList())) {
             UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
+        this.updateStudent(enrolling, dataVO);
+        this.updateClassroom(enrolling, dataVO);
+
         dataVO.getEnrollingList().add(dataVO.getEnrollingList().size(), enrolling);
         this.saveEnrolling(dataVO);
 
         UTILS.printConsoleMessage(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
-
     }
 
     @Override
@@ -39,7 +47,7 @@ public class EnrollingServiceBean implements EnrollingService {
         for (Enrolling enrolling : dataVO.getEnrollingList()) {
             System.out.println(" ");
             System.out.println("CÓDIGO: " + enrolling.getEnrollingCode());
-            System.out.println("NOME: " + enrolling.getEnrollingName().toUpperCase());
+            System.out.println("ESTUDANTE: " + enrolling.getStudentName().toUpperCase());
         }
     }
 
@@ -56,14 +64,6 @@ public class EnrollingServiceBean implements EnrollingService {
             return;
         }
 
-        String enrollingName = this.generateEnrollingName();
-
-        if (this.enrollingNameAlreadyExists(enrollingName, dataVO.getEnrollingList())) {
-            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
-            return;
-        }
-
-        enrollingToUpdate.setEnrollingName(enrollingName);
         this.saveEnrolling(dataVO);
     }
 
@@ -101,11 +101,26 @@ public class EnrollingServiceBean implements EnrollingService {
         UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
     }
 
-    private Enrolling createNewEnrolling() {
-        int enrollingCode = this.generateEnrollingCode();
-        String enrollingName = this.generateEnrollingName();
+    private Enrolling createNewEnrolling(DataVO dataVO) {
+        if (dataVO.getStudentList() == null || dataVO.getStudentList().isEmpty()) {
+            UTILS.printConsoleMessage(UTILS.EMPTY_STUDENT_LIST_ERROR_MESSAGE);
+            return null;
+        }
 
-        return new Enrolling(enrollingCode, enrollingName);
+        if (dataVO.getClassroomList() == null || dataVO.getClassroomList().isEmpty()) {
+            UTILS.printConsoleMessage(UTILS.EMPTY_CLASSROOM_LIST_ERROR_MESSAGE);
+            return null;
+        }
+
+        int enrollingCode = this.generateEnrollingCode();
+        Student student = this.selectStudent(dataVO);
+        Classroom classroom =this.selectClassroom(dataVO);
+
+        if (student == null || classroom == null) {
+            return null;
+        }
+
+        return new Enrolling(enrollingCode, student.getCode(), student.getName(), classroom.getClassroomCode(), classroom.getClassroomName());
     }
 
     private int generateEnrollingCode() {
@@ -113,24 +128,32 @@ public class EnrollingServiceBean implements EnrollingService {
         return UTILS.scannerIntValue();
     }
 
-    private String generateEnrollingName() {
-        UTILS.printConsoleMessage(UTILS.NAME);
-        return new Scanner(System.in).nextLine();
+    private Student selectStudent(DataVO dataVO) {
+        StudentServiceBean studentServiceBean = new StudentServiceBean();
+        studentServiceBean.viewStudentList(dataVO);
+        return studentServiceBean.findStudent(dataVO);
+    }
+
+    private Classroom selectClassroom(DataVO dataVO) {
+        ClassroomServiceBean classroomServiceBean = new ClassroomServiceBean();
+        classroomServiceBean.viewClassroomList(dataVO);
+
+        UTILS.printConsoleMessage(UTILS.CODE);
+        int classroomCodeToUpdateOrDelete = UTILS.scannerIntValue();
+
+        for (Classroom classroomFromList : dataVO.getClassroomList()) {
+            if (classroomFromList.getClassroomCode() == classroomCodeToUpdateOrDelete) {
+                return classroomFromList;
+            }
+        }
+
+        UTILS.printConsoleMessage(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
+        return null;
     }
 
     public boolean enrollingAlreadyExists(Enrolling newEnrolling, List<Enrolling> enrollingList) {
         for (Enrolling enrollingFromList : enrollingList) {
-            if (enrollingFromList.getEnrollingCode() == newEnrolling.getEnrollingCode() || enrollingFromList.getEnrollingName().equals(newEnrolling.getEnrollingName())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean enrollingNameAlreadyExists(String newEnrollingName, List<Enrolling> enrollingList) {
-        for (Enrolling enrolling : enrollingList) {
-            if (enrolling.getEnrollingName().equals(newEnrollingName)) {
+            if (enrollingFromList.getEnrollingCode() == newEnrolling.getEnrollingCode()) {
                 return true;
             }
         }
@@ -154,6 +177,29 @@ public class EnrollingServiceBean implements EnrollingService {
         }
 
         return enrollingToUpdateOrDelete;
+    }
+
+    private void updateStudent(Enrolling enrolling, DataVO dataVO) {
+        for (Student student : dataVO.getStudentList()) {
+            if (student.getCode() == enrolling.getStudentCode()) {
+                student.setEnrolling(enrolling);
+            }
+        }
+    }
+
+    private void updateClassroom(Enrolling enrolling, DataVO dataVO) {
+        Student studentToAdd = new Student();
+        for (Student studentFromList : dataVO.getStudentList()) {
+            if (studentFromList.getCode() == enrolling.getStudentCode()) {
+                studentToAdd = studentFromList;
+            }
+        }
+
+        for (Classroom classroom : dataVO.getClassroomList()) {
+            if (classroom.getClassroomCode() == enrolling.getClassroomCode()) {
+                classroom.getStudentList().add(classroom.getStudentList().size(), studentToAdd);
+            }
+        }
     }
 
     private void saveEnrolling(DataVO dataVO) {

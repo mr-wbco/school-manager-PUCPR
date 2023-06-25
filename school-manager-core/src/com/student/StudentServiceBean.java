@@ -41,6 +41,14 @@ public class StudentServiceBean implements StudentService {
             System.out.println("NOME: " + student.getName().toUpperCase());
             System.out.println("IDADE: " + student.getAge());
             System.out.println("CPF: " + student.getFederalIdentification());
+
+            if (student.getEnrolling() != null) {
+                System.out.println("MATRÍCULA: " + student.getEnrolling().getEnrollingCode());
+            }
+
+            if (student.getClassroom() != null) {
+                System.out.println("TURMA: " + student.getClassroom().getClassroomCode());
+            }
         }
     }
 
@@ -165,7 +173,7 @@ public class StudentServiceBean implements StudentService {
         return false;
     }
 
-    private Student findStudent(DataVO dataVO) {
+    public Student findStudent(DataVO dataVO) {
         int studentCodeToUpdateOrDelete = this.generateStudentCode();
 
         Student studentToUpdateOrDelete = null;

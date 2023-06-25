@@ -27,6 +27,12 @@ public class Main {
                 break;
             }
 
+            if (MainMenuOptionsEnum.CLEAR_ALL_DATA.equals(mainMenuOptionsEnum)) {
+                systemServiceBean.clearAllData(dataVO);
+                UTILS.pressEnterToContinue();
+                continue;
+            }
+
             while (true) {
                 ActionsMenuOptionsEnum actionsMenuOptionsEnum = systemServiceBean.showSecundaryMenu(mainMenuOptionsEnum);
 
