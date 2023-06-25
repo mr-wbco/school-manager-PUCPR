@@ -28,7 +28,6 @@ A aplicação School Manager Core oferece as seguintes funcionalidades:
 * Excluir alunos, professores e disciplinas do sistema.
 
 # Instruções de Uso
-javac -cp "lib/*;src" -d bin src/Main.java
 
 Para utilizar a aplicação School Manager Core, siga as instruções abaixo:
 
@@ -40,17 +39,31 @@ Para utilizar a aplicação School Manager Core, siga as instruções abaixo:
 
 3. Navegue até o diretório do projeto:
 
-```cd school-manager-PUCPR```
+```cd school-manager-PUCPR-master/school-manager-core```
 
-4. Compile o código-fonte da aplicação:
+4. Execute a aplicação:
 
-```javac Main.java```
+```java -cp "bin;lib/*;src/resources/*" Main```
 
-5. Execute a aplicação:
+5. Siga as instruções exibidas no console para interagir com a aplicação.
 
-```java Main```
+Importante: lembre-se de manter a pasta resources dentro do diretório bin sempre atualizado.
 
-6. Siga as instruções exibidas no console para interagir com a aplicação.
+# Instruções de Desenvolvimento
+
+Para e compilar a aplicação School Manager Core, siga as instruções abaixo:
+
+1. Navegue até o diretório do projeto:
+
+```cd school-manager-PUCPR-master/school-manager-core```
+
+2. Compile o código-fonte da aplicação:
+
+```javac -cp "lib/*;src" -d bin src/Main.java```
+
+3. Execute a aplicação:
+
+```java -cp "bin;lib/*;src/resources/*" Main```
 
 # Contribuição
 Contribuições para o aprimoramento do projeto são bem-vindas. Caso deseje contribuir, siga as etapas abaixo:
