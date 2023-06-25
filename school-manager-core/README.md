@@ -28,6 +28,8 @@ A aplicação School Manager Core oferece as seguintes funcionalidades:
 * Excluir alunos, professores e disciplinas do sistema.
 
 # Instruções de Uso
+javac -cp "lib/*;src" -d bin src/Main.java
+
 Para utilizar a aplicação School Manager Core, siga as instruções abaixo:
 
 1. Certifique-se de ter o Java Development Kit (JDK) instalado em sua máquina.
