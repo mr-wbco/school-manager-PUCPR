@@ -34,19 +34,19 @@ Para utilizar a aplicação School Manager Core, siga as instruções abaixo:
 
 2. Clone o repositório em sua máquina local:
 
-git clone https://github.com/mr-wbco/school-manager-PUCPR.git
+```git clone https://github.com/mr-wbco/school-manager-PUCPR.git```
 
 3. Navegue até o diretório do projeto:
 
-cd school-manager-PUCPR
+```cd school-manager-PUCPR```
 
 4. Compile o código-fonte da aplicação:
 
-javac Main.java
+```javac Main.java```
 
 5. Execute a aplicação:
 
-java Main
+```java Main```
 
 6. Siga as instruções exibidas no console para interagir com a aplicação.
 
@@ -57,14 +57,14 @@ Contribuições para o aprimoramento do projeto são bem-vindas. Caso deseje con
 
 2. Crie uma nova branch com a sua contribuição:
 
-git checkout -b minha-contribuicao
+```git checkout -b minha-contribuicao```
 
 3. Faça as alterações desejadas e commit as mudanças:
 
-git commit -m "Minha contribuição"
+```git commit -m "Minha contribuição"```
 
 4. Envie as alterações para o repositório remoto:
 
-git push origin minha-contribuicao
+```git push origin minha-contribuicao```
 
 5. Abra um pull request no repositório original.
