@@ -6,15 +6,11 @@ import com.system.SystemBO;
 import com.utils.UTILS;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class SubjectServiceBean implements SubjectService {
 
     @Override
     public void insertNewSubject(DataVO dataVO) {
-        UTILS.printHeaderManager();
-        UTILS.showMessageDialog(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
-
         Subject subject = this.createNewSubject();
 
         if (this.subjectAlreadyExists(subject, dataVO.getSubjectList())) {
@@ -35,11 +31,13 @@ public class SubjectServiceBean implements SubjectService {
             return;
         }
 
+        StringBuilder string = new StringBuilder();
+
         for (Subject subject : dataVO.getSubjectList()) {
-            System.out.println(" ");
-            System.out.println("CÓDIGO: " + subject.getSubjectCode());
-            System.out.println("NOME: " + subject.getSubjectName().toUpperCase());
+            string.append(String.format("%nCÓDIGO: %s%nNOME: %s%n", subject.getSubjectCode(), subject.getSubjectName().toUpperCase()));
         }
+
+        UTILS.showMessageDialogWithoutTranslate(string.toString());
     }
 
     @Override
@@ -86,9 +84,7 @@ public class SubjectServiceBean implements SubjectService {
 
     @Override
     public void clearSubjectList(DataVO dataVO) {
-        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
-
-        int choice = UTILS.scannerIntValue();
+        int choice = UTILS.showInputIntegerDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         if (choice != 1) {
             UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
@@ -107,13 +103,11 @@ public class SubjectServiceBean implements SubjectService {
     }
 
     private int generateSubjectCode() {
-        UTILS.showMessageDialog(UTILS.CODE);
-        return UTILS.scannerIntValue();
+        return UTILS.showInputIntegerDialog(UTILS.CODE);
     }
 
     private String generateSubjectName() {
-        UTILS.showMessageDialog(UTILS.NAME);
-        return new Scanner(System.in).nextLine();
+        return UTILS.showInputStringDialog(UTILS.NAME);
     }
 
     public boolean subjectAlreadyExists(Subject newSubject, List<Subject> subjectList) {

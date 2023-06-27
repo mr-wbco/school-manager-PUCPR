@@ -11,15 +11,11 @@ import com.system.SystemBO;
 import com.utils.UTILS;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class ClassroomServiceBean implements ClassroomService {
 
     @Override
     public void insertNewClassroom(DataVO dataVO) {
-        UTILS.printHeaderManager();
-        UTILS.showMessageDialog(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
-
         Classroom classroom = this.createNewClassroom(dataVO);
         if (classroom == null) {
             return;
@@ -43,24 +39,24 @@ public class ClassroomServiceBean implements ClassroomService {
             return;
         }
 
-        for (Classroom classroom : dataVO.getClassroomList()) {
-            System.out.println(" ");
-            System.out.println("CÓDIGO DA TURMA: " + classroom.getClassroomCode());
-            System.out.println("TURMA: " + classroom.getClassroomName().toUpperCase());
-            System.out.println("DISCIPLINA: " + classroom.getSubject().getSubjectName().toUpperCase());
-            System.out.println("PROFESSOR: " + classroom.getProfessor().getName().toUpperCase());
+        StringBuilder string = new StringBuilder();
 
-            System.out.println("ESTUDANTE MATRICULADOS:");
+        for (Classroom classroom : dataVO.getClassroomList()) {
+            string.append(String.format("%nCÓDIGO DA TURMA: %s%nTURMA: %s%nDISCIPLINA: %s%nPROFESSOR: %s%n", classroom.getClassroomCode(), classroom.getClassroomName().toUpperCase(), classroom.getSubject().getSubjectName().toUpperCase(), classroom.getProfessor().getName().toUpperCase()));
+
+            string.append(String.format("%nESTUDANTES MATRICULADOS:%n"));
 
             if (classroom.getStudentList() ==  null) {
-                System.out.println("NÃO HÁ ESTUDANTES MATRICULADOS NESSA TURMA.");
+                UTILS.showMessageDialogWithoutTranslate("NÃO HÁ ESTUDANTES MATRICULADOS NESSA TURMA.");
                 continue;
             }
 
             for (Student student : classroom.getStudentList()) {
-                System.out.println("-> " + student.getName());
+                string.append(String.format("-> %s%n", student.getName()));
             }
         }
+
+        UTILS.showMessageDialogWithoutTranslate(string.toString());
     }
 
     @Override
@@ -107,9 +103,7 @@ public class ClassroomServiceBean implements ClassroomService {
 
     @Override
     public void clearClassroomList(DataVO dataVO) {
-        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
-
-        int choice = UTILS.scannerIntValue();
+        int choice = UTILS.showInputIntegerDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         if (choice != 1) {
             UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
@@ -141,13 +135,11 @@ public class ClassroomServiceBean implements ClassroomService {
     }
 
     private int generateClassroomCode() {
-        UTILS.showMessageDialog(UTILS.CODE);
-        return UTILS.scannerIntValue();
+        return UTILS.showInputIntegerDialog(UTILS.CODE);
     }
 
     private String generateClassroomName() {
-        UTILS.showMessageDialog(UTILS.NAME);
-        return new Scanner(System.in).nextLine();
+        return UTILS.showInputStringDialog(UTILS.NAME);
     }
 
     private Subject generateSubject(DataVO dataVO) {
@@ -161,14 +153,6 @@ public class ClassroomServiceBean implements ClassroomService {
         professorServiceBean.viewProfessorList(dataVO);
         return professorServiceBean.findProfessor(dataVO);
     }
-
-//    private List<Student> generateStudentList(DataVO dataVO) {
-//        new StudentServiceBean().viewStudentList(dataVO);
-//        Student student = new StudentServiceBean().findStudent(dataVO);
-//        List<Student> studentList = new ArrayList<>();
-//        studentList.add(student);
-//        return studentList;
-//    }
 
     public boolean classroomAlreadyExists(Classroom newClassroom, List<Classroom> classroomList) {
         for (Classroom classroomFromList : classroomList) {

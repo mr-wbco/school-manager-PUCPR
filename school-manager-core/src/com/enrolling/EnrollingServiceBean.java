@@ -15,9 +15,6 @@ public class EnrollingServiceBean implements EnrollingService {
 
     @Override
     public void insertNewEnrolling(DataVO dataVO) {
-        UTILS.printHeaderManager();
-        UTILS.showMessageDialog(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
-
         Enrolling enrolling = this.createNewEnrolling(dataVO);
         if (enrolling == null) {
             return;
@@ -44,11 +41,13 @@ public class EnrollingServiceBean implements EnrollingService {
             return;
         }
 
+        StringBuilder string = new StringBuilder();
+
         for (Enrolling enrolling : dataVO.getEnrollingList()) {
-            System.out.println(" ");
-            System.out.println("CÓDIGO: " + enrolling.getEnrollingCode());
-            System.out.println("ESTUDANTE: " + enrolling.getStudentName().toUpperCase());
+            string.append(String.format("%nCÓDIGO: %s%nESTUDANTE: %s%n", enrolling.getEnrollingCode(), enrolling.getStudentName().toUpperCase()));
         }
+
+        UTILS.showMessageDialogWithoutTranslate(string.toString());
     }
 
     @Override
@@ -87,9 +86,7 @@ public class EnrollingServiceBean implements EnrollingService {
 
     @Override
     public void clearEnrollingList(DataVO dataVO) {
-        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
-
-        int choice = UTILS.scannerIntValue();
+        int choice = UTILS.showInputIntegerDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         if (choice != 1) {
             UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
@@ -124,8 +121,7 @@ public class EnrollingServiceBean implements EnrollingService {
     }
 
     private int generateEnrollingCode() {
-        UTILS.showMessageDialog(UTILS.CODE);
-        return UTILS.scannerIntValue();
+        return UTILS.showInputIntegerDialog(UTILS.CODE);
     }
 
     private Student selectStudent(DataVO dataVO) {
@@ -138,8 +134,7 @@ public class EnrollingServiceBean implements EnrollingService {
         ClassroomServiceBean classroomServiceBean = new ClassroomServiceBean();
         classroomServiceBean.viewClassroomList(dataVO);
 
-        UTILS.showMessageDialog(UTILS.CODE);
-        int classroomCodeToUpdateOrDelete = UTILS.scannerIntValue();
+        int classroomCodeToUpdateOrDelete = UTILS.showInputIntegerDialog(UTILS.CODE);
 
         for (Classroom classroomFromList : dataVO.getClassroomList()) {
             if (classroomFromList.getClassroomCode() == classroomCodeToUpdateOrDelete) {

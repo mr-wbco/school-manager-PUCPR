@@ -1,7 +1,6 @@
 package com.student;
 
 import com.entity.Student;
-import com.enums.MainMenuOptionsEnum;
 import com.objects.DataVO;
 import com.system.SystemBO;
 import com.utils.UTILS;
@@ -11,7 +10,7 @@ import java.util.List;
 public class StudentServiceBean implements StudentService {
 
     @Override
-    public void insertNewStudent(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO) {
+    public void insertNewStudent(DataVO dataVO) {
         Student student = this.createNewStudent();
 
         if (this.studentAlreadyExists(student, dataVO.getStudentList())) {
@@ -32,21 +31,21 @@ public class StudentServiceBean implements StudentService {
             return;
         }
 
-        String string = "";
+        StringBuilder string = new StringBuilder();
 
         for (Student student : dataVO.getStudentList()) {
-            string += String.format("%nCÓDIGO: %s%nNOME: %s%nIDADE: %s%nCPF: %s%n", student.getCode(), student.getName().toUpperCase(), student.getAge(),student. getFederalIdentification());
+            string.append(String.format("%nCÓDIGO: %s%nNOME: %s%nIDADE: %s%nCPF: %s%n", student.getCode(), student.getName().toUpperCase(), student.getAge(), student.getFederalIdentification()));
 
             if (student.getEnrolling() != null) {
-                string += String.format("MATRÍCULA: %s%n", student.getEnrolling().getEnrollingCode());
+                string.append(String.format("MATRÍCULA: %s%n", student.getEnrolling().getEnrollingCode()));
             }
 
             if (student.getClassroom() != null) {
-                string += String.format("TURMA: %s%n", student.getClassroom().getClassroomCode());
+                string.append(String.format("TURMA: %s%n", student.getClassroom().getClassroomCode()));
             }
         }
 
-        UTILS.showMessageDialogWithoutTranslate(string);
+        UTILS.showMessageDialogWithoutTranslate(string.toString());
     }
 
     @Override

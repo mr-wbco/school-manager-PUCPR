@@ -1,20 +1,16 @@
 package com.professor;
 
-import com.objects.DataVO;
 import com.entity.Professor;
+import com.objects.DataVO;
 import com.system.SystemBO;
 import com.utils.UTILS;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class ProfessorServiceBean implements ProfessorService {
 
     @Override
     public void insertNewProfessor(DataVO dataVO) {
-        UTILS.printHeaderManager();
-        UTILS.showMessageDialog(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
-
         Professor professor = this.createNewProfessor();
 
         if (this.professorAlreadyExists(professor, dataVO.getProfessorList())) {
@@ -35,13 +31,13 @@ public class ProfessorServiceBean implements ProfessorService {
             return;
         }
 
+        String string = "";
+
         for (Professor professor : dataVO.getProfessorList()) {
-            System.out.println(" ");
-            System.out.println("CÓDIGO: " + professor.getCode());
-            System.out.println("NOME: " + professor.getName().toUpperCase());
-            System.out.println("IDADE: " + professor.getAge());
-            System.out.println("CPF: " + professor.getFederalIdentification());
+            string += String.format("%nCÓDIGO: %s%nNOME: %s%nIDADE: %s%nCPF: %s%n", professor.getCode(), professor.getName().toUpperCase(), professor.getAge(),professor. getFederalIdentification());
         }
+
+        UTILS.showMessageDialogWithoutTranslate(string);
     }
 
     @Override
@@ -92,9 +88,7 @@ public class ProfessorServiceBean implements ProfessorService {
 
     @Override
     public void clearProfessorList(DataVO dataVO) {
-        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
-
-        int choice = UTILS.scannerIntValue();
+        int choice = UTILS.showInputIntegerDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         if (choice != 1) {
             UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
@@ -116,23 +110,19 @@ public class ProfessorServiceBean implements ProfessorService {
     }
 
     private int generateProfessorCode() {
-        UTILS.showMessageDialog(UTILS.CODE);
-        return UTILS.scannerIntValue();
+        return UTILS.showInputIntegerDialog(UTILS.CODE);
     }
 
     private String generateProfessorName() {
-        UTILS.showMessageDialog(UTILS.NAME);
-        return new Scanner(System.in).nextLine();
+        return UTILS.showInputStringDialog(UTILS.NAME);
     }
 
     private int generateProfessorAge() {
-        UTILS.showMessageDialog(UTILS.AGE);
-        return UTILS.scannerIntValue();
+        return UTILS.showInputIntegerDialog(UTILS.AGE);
     }
 
     private long generateProfessorFederalIdentification() {
-        UTILS.showMessageDialog(UTILS.FEDERAL_IDENTIFICATION);
-        return UTILS.scannerLongValue();
+        return UTILS.showInputIntegerDialog(UTILS.FEDERAL_IDENTIFICATION);
     }
 
     public boolean professorAlreadyExists(Professor newProfessor, List<Professor> professorList) {

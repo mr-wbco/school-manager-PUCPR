@@ -22,7 +22,7 @@ public class SystemServiceBean implements SystemService {
     public MainMenuOptionsEnum showMainMenu() {
         while (true) {
             try {
-                int option = UTILS.showInputIntegerDialog(UTILS.headerManagerString(), UTILS.mainMenuOptionsString());
+                int option = UTILS.showMenuOptionsDialog(UTILS.headerManagerString(), UTILS.mainMenuOptionsString());
                 MainMenuOptionsEnum mainMenuOptionsEnum = null;
 
                 switch (option) {
@@ -47,7 +47,7 @@ public class SystemServiceBean implements SystemService {
     public ActionsMenuOptionsEnum showSecundaryMenu(MainMenuOptionsEnum mainMenuOptionsEnum) {
         while (true) {
             try {
-                int option = UTILS.showInputIntegerDialog(UTILS.headerManagerString(), UTILS.secundaryMenuOptionsString(mainMenuOptionsEnum.toString()));
+                int option = UTILS.showMenuOptionsDialog(UTILS.headerManagerString(), UTILS.secundaryMenuOptionsString(mainMenuOptionsEnum.toString()));
                 ActionsMenuOptionsEnum actionsMenuOptionsEnum = null;
 
                 switch (option) {
@@ -70,7 +70,7 @@ public class SystemServiceBean implements SystemService {
     @Override
     public void insertMenu(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO) {
         switch (mainMenuOptionsEnum) {
-            case STUDENT -> this.studentServiceBean.insertNewStudent(mainMenuOptionsEnum, dataVO);
+            case STUDENT -> this.studentServiceBean.insertNewStudent(dataVO);
             case PROFESSOR -> this.professorServiceBean.insertNewProfessor(dataVO);
             case SUBJECT -> this.subjectServiceBean.insertNewSubject(dataVO);
             case CLASS -> this.classroomServiceBean.insertNewClassroom(dataVO);
