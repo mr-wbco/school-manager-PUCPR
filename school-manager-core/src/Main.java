@@ -17,19 +17,18 @@ public class Main {
             MainMenuOptionsEnum mainMenuOptionsEnum = systemServiceBean.showMainMenu();
 
             if (mainMenuOptionsEnum == null) {
-                UTILS.printConsoleMessage(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE);
-                UTILS.pressEnterToContinue();
+                UTILS.showMessageDialog(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE);
+
                 continue;
             }
 
             if (MainMenuOptionsEnum.EXIT.equals(mainMenuOptionsEnum)) {
-                UTILS.printConsoleMessage(UTILS.EXIT_SYSTEM_MESSAGE);
+                UTILS.showMessageDialog(UTILS.EXIT_SYSTEM_MESSAGE);
                 break;
             }
 
             if (MainMenuOptionsEnum.CLEAR_ALL_DATA.equals(mainMenuOptionsEnum)) {
                 systemServiceBean.clearAllData(dataVO);
-                UTILS.pressEnterToContinue();
                 continue;
             }
 
@@ -37,8 +36,7 @@ public class Main {
                 ActionsMenuOptionsEnum actionsMenuOptionsEnum = systemServiceBean.showSecundaryMenu(mainMenuOptionsEnum);
 
                 if (actionsMenuOptionsEnum == null) {
-                    UTILS.printConsoleMessage(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE);
-                    UTILS.pressEnterToContinue();
+                    UTILS.showMessageDialog(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE);
                     continue;
                 }
 

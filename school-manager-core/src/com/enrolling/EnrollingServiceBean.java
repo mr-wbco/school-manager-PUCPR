@@ -16,7 +16,7 @@ public class EnrollingServiceBean implements EnrollingService {
     @Override
     public void insertNewEnrolling(DataVO dataVO) {
         UTILS.printHeaderManager();
-        UTILS.printConsoleMessage(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
+        UTILS.showMessageDialog(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
 
         Enrolling enrolling = this.createNewEnrolling(dataVO);
         if (enrolling == null) {
@@ -24,7 +24,7 @@ public class EnrollingServiceBean implements EnrollingService {
         }
 
         if (this.enrollingAlreadyExists(enrolling, dataVO.getEnrollingList())) {
-            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
@@ -34,13 +34,13 @@ public class EnrollingServiceBean implements EnrollingService {
         dataVO.getEnrollingList().add(dataVO.getEnrollingList().size(), enrolling);
         this.saveEnrolling(dataVO);
 
-        UTILS.printConsoleMessage(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
     }
 
     @Override
     public void viewEnrollingList(DataVO dataVO) {
         if (dataVO.getEnrollingList() == null || dataVO.getEnrollingList().isEmpty()) {
-            UTILS.printConsoleMessage(UTILS.EMPTY_LIST_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.EMPTY_LIST_ERROR_MESSAGE);
             return;
         }
 
@@ -82,33 +82,33 @@ public class EnrollingServiceBean implements EnrollingService {
 
         dataVO.getEnrollingList().remove(enrollingToDelete);
         this.saveEnrolling(dataVO);
-        UTILS.printConsoleMessage(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
     }
 
     @Override
     public void clearEnrollingList(DataVO dataVO) {
-        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         int choice = UTILS.scannerIntValue();
 
         if (choice != 1) {
-            UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
+            UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
             return;
         }
 
         dataVO.getEnrollingList().clear();
         this.saveEnrolling(dataVO);
-        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
     }
 
     private Enrolling createNewEnrolling(DataVO dataVO) {
         if (dataVO.getStudentList() == null || dataVO.getStudentList().isEmpty()) {
-            UTILS.printConsoleMessage(UTILS.EMPTY_STUDENT_LIST_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.EMPTY_STUDENT_LIST_ERROR_MESSAGE);
             return null;
         }
 
         if (dataVO.getClassroomList() == null || dataVO.getClassroomList().isEmpty()) {
-            UTILS.printConsoleMessage(UTILS.EMPTY_CLASSROOM_LIST_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.EMPTY_CLASSROOM_LIST_ERROR_MESSAGE);
             return null;
         }
 
@@ -124,7 +124,7 @@ public class EnrollingServiceBean implements EnrollingService {
     }
 
     private int generateEnrollingCode() {
-        UTILS.printConsoleMessage(UTILS.CODE);
+        UTILS.showMessageDialog(UTILS.CODE);
         return UTILS.scannerIntValue();
     }
 
@@ -138,7 +138,7 @@ public class EnrollingServiceBean implements EnrollingService {
         ClassroomServiceBean classroomServiceBean = new ClassroomServiceBean();
         classroomServiceBean.viewClassroomList(dataVO);
 
-        UTILS.printConsoleMessage(UTILS.CODE);
+        UTILS.showMessageDialog(UTILS.CODE);
         int classroomCodeToUpdateOrDelete = UTILS.scannerIntValue();
 
         for (Classroom classroomFromList : dataVO.getClassroomList()) {
@@ -147,7 +147,7 @@ public class EnrollingServiceBean implements EnrollingService {
             }
         }
 
-        UTILS.printConsoleMessage(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
+        UTILS.showMessageDialog(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
         return null;
     }
 
@@ -173,7 +173,7 @@ public class EnrollingServiceBean implements EnrollingService {
         }
 
         if (enrollingToUpdateOrDelete == null) {
-            UTILS.printConsoleMessage(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
         }
 
         return enrollingToUpdateOrDelete;

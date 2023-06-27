@@ -18,7 +18,7 @@ public class ClassroomServiceBean implements ClassroomService {
     @Override
     public void insertNewClassroom(DataVO dataVO) {
         UTILS.printHeaderManager();
-        UTILS.printConsoleMessage(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
+        UTILS.showMessageDialog(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
 
         Classroom classroom = this.createNewClassroom(dataVO);
         if (classroom == null) {
@@ -26,20 +26,20 @@ public class ClassroomServiceBean implements ClassroomService {
         }
 
         if (this.classroomAlreadyExists(classroom, dataVO.getClassroomList())) {
-            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
         dataVO.getClassroomList().add(dataVO.getClassroomList().size(), classroom);
         this.saveClassroom(dataVO);
 
-        UTILS.printConsoleMessage(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
     }
 
     @Override
     public void viewClassroomList(DataVO dataVO) {
         if (dataVO.getClassroomList() == null || dataVO.getClassroomList().isEmpty()) {
-            UTILS.printConsoleMessage(UTILS.EMPTY_LIST_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.EMPTY_LIST_ERROR_MESSAGE);
             return;
         }
 
@@ -79,7 +79,7 @@ public class ClassroomServiceBean implements ClassroomService {
         String classroomName = this.generateClassroomName();
 
         if (this.classroomNameAlreadyExists(classroomName, dataVO.getClassroomList())) {
-            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
@@ -102,33 +102,33 @@ public class ClassroomServiceBean implements ClassroomService {
 
         dataVO.getClassroomList().remove(classroomToDelete);
         this.saveClassroom(dataVO);
-        UTILS.printConsoleMessage(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
     }
 
     @Override
     public void clearClassroomList(DataVO dataVO) {
-        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         int choice = UTILS.scannerIntValue();
 
         if (choice != 1) {
-            UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
+            UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
             return;
         }
 
         dataVO.getClassroomList().clear();
         this.saveClassroom(dataVO);
-        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
     }
 
     private Classroom createNewClassroom(DataVO dataVO) {
         if (dataVO.getProfessorList() == null || dataVO.getProfessorList().isEmpty()) {
-            UTILS.printConsoleMessage(UTILS.EMPTY_PROFESSOR_LIST_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.EMPTY_PROFESSOR_LIST_ERROR_MESSAGE);
             return null;
         }
 
         if (dataVO.getSubjectList() == null || dataVO.getSubjectList().isEmpty()) {
-            UTILS.printConsoleMessage(UTILS.EMPTY_SUBJECT_LIST_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.EMPTY_SUBJECT_LIST_ERROR_MESSAGE);
             return null;
         }
 
@@ -141,12 +141,12 @@ public class ClassroomServiceBean implements ClassroomService {
     }
 
     private int generateClassroomCode() {
-        UTILS.printConsoleMessage(UTILS.CODE);
+        UTILS.showMessageDialog(UTILS.CODE);
         return UTILS.scannerIntValue();
     }
 
     private String generateClassroomName() {
-        UTILS.printConsoleMessage(UTILS.NAME);
+        UTILS.showMessageDialog(UTILS.NAME);
         return new Scanner(System.in).nextLine();
     }
 
@@ -202,7 +202,7 @@ public class ClassroomServiceBean implements ClassroomService {
         }
 
         if (classroomToUpdateOrDelete == null) {
-            UTILS.printConsoleMessage(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
         }
 
         return classroomToUpdateOrDelete;

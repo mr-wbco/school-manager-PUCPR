@@ -1,5 +1,6 @@
 package com.utils;
 
+import javax.swing.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -35,10 +36,8 @@ public class UTILS {
     public static final String AGE = "AGE";
     public static final String FEDERAL_IDENTIFICATION = "FEDERAL_IDENTIFICATION";
 
-    public static final String ENTER_TO_CONTINUE_MESSAGE = "ENTER_TO_CONTINUE_MESSAGE";
     public static final String BACK_TO_MAIN_MENU_MESSAGE = "BACK_TO_MAIN_MENU_MESSAGE";
     public static final String EXIT_SYSTEM_MESSAGE = "EXIT_SYSTEM_MESSAGE";
-    public static final String CLEAR_ALL_DATA_SYSTEM_MESSAGE = "CLEAR_ALL_DATA_SYSTEM_MESSAGE";
 
     public static String translate(String string) {
         return ResourceBundle.getBundle(MESSAGE_BUNDLE, Locale.getDefault()).getString(string);
@@ -50,16 +49,6 @@ public class UTILS {
         }
     }
 
-    public static void pressEnterToContinue() {
-        System.out.println(" ");
-        System.out.println(UTILS.translate(UTILS.ENTER_TO_CONTINUE_MESSAGE));
-        String continueOption = new Scanner(System.in).next();
-    }
-
-    public static void printConsoleMessage(String message) {
-        System.out.println(UTILS.translate(message));
-    }
-
     public static void printHeaderManager() {
         UTILS.clearScreen();
         System.out.println("*********************************");
@@ -68,33 +57,62 @@ public class UTILS {
         System.out.println(" ");
     }
 
-    public static void printMainMenuOptions() {
-        System.out.println("Você está em: [MENU PRINCIPAL]");
-        System.out.println("(1) Gerenciar Estudantes");
-        System.out.println("(2) Gerenciar Professores");
-        System.out.println("(3) Gerenciar Disciplinas");
-        System.out.println("(4) Gerenciar Turmas");
-        System.out.println("(5) Gerenciar Matrículas");
-        System.out.println("(9) Limpar todos os registros");
-        System.out.println("(0) Sair");
-        System.out.println(" ");
-        System.out.println("Digite a opcão desejada: ");
+    public static String headerManagerString() {
+        UTILS.clearScreen();
+        return String.format("%nGERENCIADOR DE SISTEMA ACADÊMICO%n");
     }
 
-    public static void printSecundaryMenuOptions(String mainMenuOptionsEnumName) {
-        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s]") + "%n", UTILS.translate(mainMenuOptionsEnumName));
-        System.out.println("(1) Incluir");
-        System.out.println("(2) Listar");
-        System.out.println("(3) Atualizar");
-        System.out.println("(4) Remover");
-        System.out.println("(5) Limpar todos os registros");
-        System.out.println("(0) Voltar ao menu principal");
-        System.out.println(" ");
-        System.out.println("Digite a opcão desejada: ");
+    public static String mainMenuOptionsString() {
+        return String.format("Você está em: [MENU PRINCIPAL]%n%n(1) Gerenciar Estudantes%n(2) Gerenciar Professores%n(3) Gerenciar Disciplinas%n(4) Gerenciar Turmas%n(5) Gerenciar Matrículas%n(9) Limpar todos os registros%n%n(0) Sair");
     }
 
-    public static void printCurrentSecundaryMenuPosition(String mainMenuOptionsEnumName, String secondaryMenuName) {
-        System.out.printf(("Você está em: [MENU PRINCIPAL] > [MENU DE %s] > [%s]") + "%n", UTILS.translate(mainMenuOptionsEnumName), UTILS.translate(secondaryMenuName));
+    public static String secundaryMenuOptionsString(String mainMenuOptionsEnumName) {
+        return String.format("Você está em: [MENU PRINCIPAL] > [MENU DE %s]%n%n(1) Incluir%n(2) Listar%n(3) Atualizar%n(4) Remover%n(5) Limpar todos os registros%n%n(0) Voltar ao menu principal%n", UTILS.translate(mainMenuOptionsEnumName));
+    }
+
+    public static void showMessageDialogWithoutTranslate(String message) {
+        JOptionPane.showMessageDialog(null, headerManagerString() + message);
+    }
+
+    public static void showMessageDialog(String message) {
+        JOptionPane.showMessageDialog(null, headerManagerString() + UTILS.translate(message));
+    }
+
+    public static String showInputStringDialog(String string) {
+        return JOptionPane.showInputDialog(null, headerManagerString() + UTILS.translate(string) + ": ");
+    }
+
+    public static int showInputIntegerDialog(String string) {
+        String entry = JOptionPane.showInputDialog(null, headerManagerString() + UTILS.translate(string) + ": ");
+
+        while (!validInteger(entry)) {
+            entry = JOptionPane.showInputDialog(null, "Valor incorreto!\n\nDigite um número inteiro.");
+        }
+
+        return Integer.parseInt(entry);
+    }
+
+    public static int showInputIntegerDialog(String header, String options) {
+        String entry = JOptionPane.showInputDialog(null, header + "\n\n" + options + "\n\nDigite a opção desejada: ");
+
+        while (!validInteger(entry)) {
+            entry = JOptionPane.showInputDialog(null, "Valor incorreto!\n\nDigite um número inteiro.");
+        }
+
+        return Integer.parseInt(entry);
+    }
+
+    public static boolean validInteger(String string) {
+        boolean result;
+
+        try {
+            Integer.parseInt(string);
+            result = true;
+        } catch (NumberFormatException e) {
+            result = false;
+        }
+
+        return result;
     }
 
     public static int scannerIntValue() {
@@ -110,22 +128,6 @@ public class UTILS {
             }
         }
 
-        return number;
-    }
-
-    public static int scannerIntValue2() {
-        int number = 0;
-        boolean isValidNumber = false;
-        Scanner scanner = new Scanner(System.in);
-        while (!isValidNumber) {
-            try {
-                number = scanner.nextInt();
-                isValidNumber = true;
-            } catch (Exception e) {
-                System.out.println(UTILS.translate(UTILS.INCORRECT_NUMBER_ERROR_MESSAGE));
-                scanner.nextLine(); // Consumir a entrada inválida
-            }
-        }
         return number;
     }
 

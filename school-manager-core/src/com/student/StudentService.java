@@ -1,9 +1,10 @@
 package com.student;
 
+import com.enums.MainMenuOptionsEnum;
 import com.objects.DataVO;
 
 public interface StudentService {
-    void insertNewStudent(DataVO dataVO);
+    void insertNewStudent(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO);
 
     void viewStudentList(DataVO dataVO);
 

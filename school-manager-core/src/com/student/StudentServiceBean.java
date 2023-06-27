@@ -1,55 +1,52 @@
 package com.student;
 
-import com.objects.DataVO;
 import com.entity.Student;
+import com.enums.MainMenuOptionsEnum;
+import com.objects.DataVO;
 import com.system.SystemBO;
 import com.utils.UTILS;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class StudentServiceBean implements StudentService {
 
     @Override
-    public void insertNewStudent(DataVO dataVO) {
-        UTILS.printHeaderManager();
-        UTILS.printConsoleMessage(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
-
+    public void insertNewStudent(MainMenuOptionsEnum mainMenuOptionsEnum, DataVO dataVO) {
         Student student = this.createNewStudent();
 
         if (this.studentAlreadyExists(student, dataVO.getStudentList())) {
-            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
         dataVO.getStudentList().add(dataVO.getStudentList().size(), student);
         this.saveStudent(dataVO);
 
-        UTILS.printConsoleMessage(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
     }
 
     @Override
     public void viewStudentList(DataVO dataVO) {
         if (dataVO.getStudentList() == null || dataVO.getStudentList().isEmpty()) {
-            UTILS.printConsoleMessage(UTILS.EMPTY_LIST_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.EMPTY_LIST_ERROR_MESSAGE);
             return;
         }
 
+        String string = "";
+
         for (Student student : dataVO.getStudentList()) {
-            System.out.println(" ");
-            System.out.println("CÓDIGO: " + student.getCode());
-            System.out.println("NOME: " + student.getName().toUpperCase());
-            System.out.println("IDADE: " + student.getAge());
-            System.out.println("CPF: " + student.getFederalIdentification());
+            string += String.format("%nCÓDIGO: %s%nNOME: %s%nIDADE: %s%nCPF: %s%n", student.getCode(), student.getName().toUpperCase(), student.getAge(),student. getFederalIdentification());
 
             if (student.getEnrolling() != null) {
-                System.out.println("MATRÍCULA: " + student.getEnrolling().getEnrollingCode());
+                string += String.format("MATRÍCULA: %s%n", student.getEnrolling().getEnrollingCode());
             }
 
             if (student.getClassroom() != null) {
-                System.out.println("TURMA: " + student.getClassroom().getClassroomCode());
+                string += String.format("TURMA: %s%n", student.getClassroom().getClassroomCode());
             }
         }
+
+        UTILS.showMessageDialogWithoutTranslate(string);
     }
 
     @Override
@@ -70,7 +67,7 @@ public class StudentServiceBean implements StudentService {
         long studentFederalIdentification = this.generateStudentFederalIdentification();
 
         if (this.studentNameAlreadyExists(studentName, dataVO.getStudentList()) || this.studentFederalIdentificationAlreadyExists(studentFederalIdentification, dataVO.getStudentList())) {
-            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
@@ -95,23 +92,21 @@ public class StudentServiceBean implements StudentService {
 
         dataVO.getStudentList().remove(studentToDelete);
         this.saveStudent(dataVO);
-        UTILS.printConsoleMessage(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
     }
 
     @Override
     public void clearStudentList(DataVO dataVO) {
-        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
-
-        int choice = UTILS.scannerIntValue();
+        int choice = UTILS.showInputIntegerDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         if (choice != 1) {
-            UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
+            UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
             return;
         }
 
         dataVO.getStudentList().clear();
         this.saveStudent(dataVO);
-        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
     }
 
     private Student createNewStudent() {
@@ -124,23 +119,19 @@ public class StudentServiceBean implements StudentService {
     }
 
     private int generateStudentCode() {
-        UTILS.printConsoleMessage(UTILS.CODE);
-        return UTILS.scannerIntValue();
+        return UTILS.showInputIntegerDialog(UTILS.CODE);
     }
 
     private String generateStudentName() {
-        UTILS.printConsoleMessage(UTILS.NAME);
-        return new Scanner(System.in).nextLine();
+        return UTILS.showInputStringDialog(UTILS.NAME);
     }
 
     private int generateStudentAge() {
-        UTILS.printConsoleMessage(UTILS.AGE);
-        return UTILS.scannerIntValue();
+        return UTILS.showInputIntegerDialog(UTILS.AGE);
     }
 
     private long generateStudentFederalIdentification() {
-        UTILS.printConsoleMessage(UTILS.FEDERAL_IDENTIFICATION);
-        return UTILS.scannerLongValue();
+        return UTILS.showInputIntegerDialog(UTILS.FEDERAL_IDENTIFICATION);
     }
 
     public boolean studentAlreadyExists(Student newStudent, List<Student> studentList) {
@@ -185,7 +176,7 @@ public class StudentServiceBean implements StudentService {
         }
 
         if (studentToUpdateOrDelete == null) {
-            UTILS.printConsoleMessage(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
         }
 
         return studentToUpdateOrDelete;

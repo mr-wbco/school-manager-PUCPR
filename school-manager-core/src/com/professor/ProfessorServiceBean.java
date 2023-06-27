@@ -13,25 +13,25 @@ public class ProfessorServiceBean implements ProfessorService {
     @Override
     public void insertNewProfessor(DataVO dataVO) {
         UTILS.printHeaderManager();
-        UTILS.printConsoleMessage(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
+        UTILS.showMessageDialog(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
 
         Professor professor = this.createNewProfessor();
 
         if (this.professorAlreadyExists(professor, dataVO.getProfessorList())) {
-            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
         dataVO.getProfessorList().add(dataVO.getProfessorList().size(), professor);
         this.saveProfessor(dataVO);
 
-        UTILS.printConsoleMessage(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
     }
 
     @Override
     public void viewProfessorList(DataVO dataVO) {
         if (dataVO.getProfessorList() == null || dataVO.getProfessorList().isEmpty()) {
-            UTILS.printConsoleMessage(UTILS.EMPTY_LIST_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.EMPTY_LIST_ERROR_MESSAGE);
             return;
         }
 
@@ -62,7 +62,7 @@ public class ProfessorServiceBean implements ProfessorService {
         long studentFederalIdentification = this.generateProfessorFederalIdentification();
 
         if (this.professorNameAlreadyExists(studentName, dataVO.getProfessorList()) || this.professorFederalIdentificationAlreadyExists(studentFederalIdentification, dataVO.getProfessorList())) {
-            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
@@ -87,23 +87,23 @@ public class ProfessorServiceBean implements ProfessorService {
 
         dataVO.getProfessorList().remove(professorToDelete);
         this.saveProfessor(dataVO);
-        UTILS.printConsoleMessage(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
     }
 
     @Override
     public void clearProfessorList(DataVO dataVO) {
-        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         int choice = UTILS.scannerIntValue();
 
         if (choice != 1) {
-            UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
+            UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
             return;
         }
 
         dataVO.getProfessorList().clear();
         this.saveProfessor(dataVO);
-        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
     }
 
     private Professor createNewProfessor() {
@@ -116,22 +116,22 @@ public class ProfessorServiceBean implements ProfessorService {
     }
 
     private int generateProfessorCode() {
-        UTILS.printConsoleMessage(UTILS.CODE);
+        UTILS.showMessageDialog(UTILS.CODE);
         return UTILS.scannerIntValue();
     }
 
     private String generateProfessorName() {
-        UTILS.printConsoleMessage(UTILS.NAME);
+        UTILS.showMessageDialog(UTILS.NAME);
         return new Scanner(System.in).nextLine();
     }
 
     private int generateProfessorAge() {
-        UTILS.printConsoleMessage(UTILS.AGE);
+        UTILS.showMessageDialog(UTILS.AGE);
         return UTILS.scannerIntValue();
     }
 
     private long generateProfessorFederalIdentification() {
-        UTILS.printConsoleMessage(UTILS.FEDERAL_IDENTIFICATION);
+        UTILS.showMessageDialog(UTILS.FEDERAL_IDENTIFICATION);
         return UTILS.scannerLongValue();
     }
 
@@ -177,7 +177,7 @@ public class ProfessorServiceBean implements ProfessorService {
         }
 
         if (professorToUpdateOrDelete == null) {
-            UTILS.printConsoleMessage(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
         }
 
         return professorToUpdateOrDelete;

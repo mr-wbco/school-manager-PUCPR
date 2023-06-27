@@ -13,25 +13,25 @@ public class SubjectServiceBean implements SubjectService {
     @Override
     public void insertNewSubject(DataVO dataVO) {
         UTILS.printHeaderManager();
-        UTILS.printConsoleMessage(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
+        UTILS.showMessageDialog(UTILS.INSERT_NEW_INFORMATION_MESSAGE);
 
         Subject subject = this.createNewSubject();
 
         if (this.subjectAlreadyExists(subject, dataVO.getSubjectList())) {
-            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
         dataVO.getSubjectList().add(dataVO.getSubjectList().size(), subject);
         this.saveSubject(dataVO);
 
-        UTILS.printConsoleMessage(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.INSERT_NEW_SUCCESS_MESSAGE);
     }
 
     @Override
     public void viewSubjectList(DataVO dataVO) {
         if (dataVO.getSubjectList() == null || dataVO.getSubjectList().isEmpty()) {
-            UTILS.printConsoleMessage(UTILS.EMPTY_LIST_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.EMPTY_LIST_ERROR_MESSAGE);
             return;
         }
 
@@ -58,7 +58,7 @@ public class SubjectServiceBean implements SubjectService {
         String subjectName = this.generateSubjectName();
 
         if (this.subjectNameAlreadyExists(subjectName, dataVO.getSubjectList())) {
-            UTILS.printConsoleMessage(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.ALREADY_EXISTS_ERROR_MESSAGE);
             return;
         }
 
@@ -81,23 +81,23 @@ public class SubjectServiceBean implements SubjectService {
 
         dataVO.getSubjectList().remove(subjectToDelete);
         this.saveSubject(dataVO);
-        UTILS.printConsoleMessage(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_RECORD_SUCCESS_MESSAGE);
     }
 
     @Override
     public void clearSubjectList(DataVO dataVO) {
-        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_QUESTION_MESSAGE);
 
         int choice = UTILS.scannerIntValue();
 
         if (choice != 1) {
-            UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
+            UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_CANCEL_MESSAGE);
             return;
         }
 
         dataVO.getSubjectList().clear();
         this.saveSubject(dataVO);
-        UTILS.printConsoleMessage(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
+        UTILS.showMessageDialog(UTILS.DELETE_ALL_RECORDS_SUCCESS_MESSAGE);
     }
 
     private Subject createNewSubject() {
@@ -107,12 +107,12 @@ public class SubjectServiceBean implements SubjectService {
     }
 
     private int generateSubjectCode() {
-        UTILS.printConsoleMessage(UTILS.CODE);
+        UTILS.showMessageDialog(UTILS.CODE);
         return UTILS.scannerIntValue();
     }
 
     private String generateSubjectName() {
-        UTILS.printConsoleMessage(UTILS.NAME);
+        UTILS.showMessageDialog(UTILS.NAME);
         return new Scanner(System.in).nextLine();
     }
 
@@ -148,7 +148,7 @@ public class SubjectServiceBean implements SubjectService {
         }
 
         if (subjectToUpdateOrDelete == null) {
-            UTILS.printConsoleMessage(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
+            UTILS.showMessageDialog(UTILS.CODE_NOT_FOUND_ERROR_MESSAGE);
         }
 
         return subjectToUpdateOrDelete;
