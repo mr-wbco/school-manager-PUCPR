@@ -1,6 +1,26 @@
 {
-  "studentList": [],
-  "professorList": [],
+  "studentList": [
+    {
+      "code": 1,
+      "name": "estudante um",
+      "age": 12,
+      "federalIdentification": 1293786178
+    },
+    {
+      "code": 2,
+      "name": "estudante dois",
+      "age": 12,
+      "federalIdentification": 12736
+    }
+  ],
+  "professorList": [
+    {
+      "code": 1,
+      "name": "professor um",
+      "age": 23,
+      "federalIdentification": -659285024
+    }
+  ],
   "subjectList": [],
   "classroomList": [],
   "enrollingList": []
